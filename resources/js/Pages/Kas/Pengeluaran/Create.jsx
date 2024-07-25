@@ -113,7 +113,7 @@ export default function Create({ lastKode }) {
                 onClose={() => setOpenModalCreate(false)}
                 size="4xl"
             >
-                <Modal.Header>Tambah Pendapatan</Modal.Header>
+                <Modal.Header>Tambah Pengeluaran</Modal.Header>
                 <Modal.Body>
                     <div className="space-y-6">
                         <div>
