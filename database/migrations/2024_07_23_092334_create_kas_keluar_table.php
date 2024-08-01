@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('kas_keluar', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
-            $table->string('nama');
-            $table->integer('jumlah');
-            $table->integer('total');
-            $table->string('metode_pembayaran');
-            $table->string('keterangan')->nullable();
+            $table->string('kode', 30)->unique();
+            $table->string('nama', 50);
+            $table->integer('jumlah', 10);
+            $table->integer('total', 10);
+            $table->string('metode_pembayaran', 10);
+            $table->string('keterangan', 100)->nullable();
             $table->timestamps();
 
             $table->foreign('kode')->references('kode')->on('kas')->onDelete('cascade');

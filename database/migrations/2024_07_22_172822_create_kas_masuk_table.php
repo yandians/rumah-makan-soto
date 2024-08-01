@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('kas_masuk', function (Blueprint $table) {
             $table->id();
-            $table->string('kode')->unique();
-            $table->string('metode_pembayaran');
+            $table->string('kode', 30)->unique();
+            $table->string('metode_pembayaran', 20);
             $table->timestamps();
 
             $table->foreign('kode')->references('kode')->on('kas')->onDelete('cascade');

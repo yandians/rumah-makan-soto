@@ -20,6 +20,6 @@ class Owner
             return $next($request);
         }
 
-        return redirect('/');
+        return redirect('/dashboard');
     }
 }
