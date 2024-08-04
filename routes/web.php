@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DaftarMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasController;
 use App\Http\Controllers\ProdukController;
@@ -28,6 +29,8 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+
+Route::get('/daftar-menu', [DaftarMenuController::class, 'index']);
 
 // Route::get('/', function () {
 //     return Inertia::location(route('login'));
