@@ -42,6 +42,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::get('/pesan', [KasController::class, 'indexPesan'])->name('kasPesan.index');
+Route::post('/pesan', [KasController::class, 'storePesan'])->name('kasPesan.store');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -93,7 +96,7 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::get('/makanan/{makanan}/edit', [MakananController::class, 'edit'])->name('makanan.edit');
     Route::put('/makanan/{makanan}', [MakananController::class, 'update'])->name('makanan.update');
     Route::delete('/makanan/{makanan}', [MakananController::class, 'destroy'])->name('makanan.destroy');
-    
+
     Route::get('/laporan/pendapatan', [KasController::class, 'indexLaporanPendapatan'])->name('kasLaporanPendapatan.index');
     Route::get('/laporan/pengeluaran', [KasController::class, 'indexLaporanPengeluaran'])->name('kasLaporanPengeluaran.index');
     Route::get('/laporan/bukubesar', [KasController::class, 'indexLaporanBukuBesar'])->name('kasLaporanBukuBesar.index');

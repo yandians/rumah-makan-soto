@@ -78,6 +78,11 @@ class KasController extends Controller
         ]);
     }
 
+    public function indexPesan(Request $request)
+    {
+        return Inertia::render('Kas/Pesan/Index', []);
+    }
+
     public function indexPengeluaran(Request $request)
     {
         $query = KasKeluar::query();
@@ -259,6 +264,57 @@ class KasController extends Controller
             $kasMasuk = KasMasuk::create([
                 'kode' => $request->kode,
                 'metode_pembayaran' => $metode_pembayaran,
+            ]);
+
+            $errors = [];
+            foreach ($request->input('makanans') as $index => $makanans) {
+                $validator = Validator::make($makanans, [
+                    'makanan_id' => 'required|integer|min:0',
+                    'jumlah' => 'required|integer|min:0',
+                ]);
+
+                if ($validator->fails()) {
+                    return back()->withInput()->withErrors($validator);
+                } else {
+                    KasMasukMakanan::create([
+                        'kode' => $request->kode,
+                        'makanan_id' => $makanans['makanan_id'],
+                        'jumlah' => $makanans['jumlah'],
+                    ]);
+                }
+            }
+
+            if (!empty($errors)) {
+                DB::rollback();
+                return back()->withInput()->withErrors($errors); // Mengembalikan pesan kesalahan ke view
+            }
+
+            DB::commit();
+
+            return redirect()->route('kasPendapatan.index')->with('message', sprintf(
+                "Pendapatan dengan code %s berhasil dibuat!",
+                $request->kode // Menggunakan $request->kode
+            ));
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+        }
+    }
+
+    public function storePesan(StoreKasRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+            $metode_pembayaran = $request->input('metode_pembayaran');
+
+            $kas = Kas::create([
+                'kode' => $request->kode,
+            ]);
+
+            $kasMasuk = KasMasuk::create([
+                'kode' => $request->kode,
+                'metode_pembayaran' => $metode_pembayaran,
+                'status_pembayaran' => $request->status,
             ]);
 
             $errors = [];

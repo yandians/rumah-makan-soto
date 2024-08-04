@@ -57,10 +57,20 @@ class MakananController extends Controller
     public function store(StoreMakananRequest $request)
     {
         try {
+
+            $originalFilename = $request->file('image')->getClientOriginalName();
+            $timestamp = now()->timestamp;
+            $newFilename = $timestamp . '_' . $originalFilename;
+        
+            // Store the file
+            $path = $request->file('image')->storeAs('images', $newFilename, 'public');
+        
             $makanan = new Makanan();
             $makanan->nama = $request['nama'];
             $makanan->kategori = $request['kategori'];
             $makanan->harga = $request['harga'];
+            $makanan->image = $path;
+            $makanan->deskripsi = $request['deskripsi'];
             $makanan->save();
 
             return redirect()->route('makanan.index')->with('message', sprintf(
