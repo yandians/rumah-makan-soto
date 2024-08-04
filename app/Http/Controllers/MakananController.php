@@ -29,8 +29,10 @@ class MakananController extends Controller
 
         $totalMakanan = $query->count();
         $makanans = $query->paginate(10);
+        // dd($makanans);
 
         $page = $request->input('page');
+
 
         return Inertia::render('Makanan/Index', [
             'makanans' => $makanans,

@@ -14,7 +14,9 @@ class Makanan extends Model
     protected $fillable = [
         'nama',
         'kategori',
-        'harga'
+        'harga',
+        'image',
+        'deskripsi'
     ];
 
     public function kasMasukProduk()
