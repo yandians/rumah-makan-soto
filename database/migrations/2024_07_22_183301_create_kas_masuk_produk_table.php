@@ -16,11 +16,11 @@ class CreateKasMasukProdukTable extends Migration
         Schema::create('kas_masuk_produk', function (Blueprint $table) {
             $table->id();
             $table->string('kode');
-            $table->unsignedBigInteger('produk_id');
+            $table->unsignedBigInteger('makanan_id');
             $table->integer('jumlah');
             $table->timestamps();
 
-            $table->foreign('produk_id')->references('id')->on('produks')->onDelete('cascade');
+            $table->foreign('makanan_id')->references('id')->on('makanans')->onDelete('cascade');
             $table->foreign('kode')->references('kode')->on('kas_masuk')->onDelete('cascade');
         });
     }
