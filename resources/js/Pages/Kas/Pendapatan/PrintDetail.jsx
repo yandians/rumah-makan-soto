@@ -12,13 +12,13 @@ function formatRupiah(angka) {
 
 const PrintDetail = React.forwardRef(({ data }, ref) => {
     const totalPembayaran = useMemo(() => {
-        return data.produks.reduce((total, produk) => {
-            const hargaProduk = produk.harga
-                ? produk.harga
-                : produk.produk.harga * produk.jumlah;
+        return data.makanans.reduce((total, makanan) => {
+            const hargaProduk = makanan.harga
+                ? makanan.harga
+                : makanan.makanan.harga * makanan.jumlah;
             return total + hargaProduk;
         }, 0);
-    }, [data.produks]);
+    }, [data.makanans]);
     return (
         <>
             <div ref={ref} className="print:my-10 print:mx-20 print:text-[9px]">
@@ -53,22 +53,22 @@ const PrintDetail = React.forwardRef(({ data }, ref) => {
                         </table>
                         <table className="mt-5 border-collapse border border-gray-200">
                             <tbody>
-                                {data.produks.map((produk, index) => (
+                                {data.makanans.map((makanan, index) => (
                                     <tr key={index}>
                                         <td className="px-6 py-4 whitespace-nowrap text-gray-900">
-                                            {produk.jumlah} *{" "}
-                                            {produk.produk.harga}
+                                            {makanan.jumlah} *{" "}
+                                            {makanan.makanan.harga}
                                             <br />
-                                            {produk.nama
-                                                ? produk.nama
-                                                : produk.produk.nama}
+                                            {makanan.nama
+                                                ? makanan.nama
+                                                : makanan.makanan.nama}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-gray-900 align-top">
                                             {formatRupiah(
-                                                produk.harga
-                                                    ? produk.harga
-                                                    : produk.produk.harga *
-                                                          produk.jumlah
+                                                makanan.harga
+                                                    ? makanan.harga
+                                                    : makanan.makanan.harga *
+                                                          makanan.jumlah
                                             )}
                                         </td>
                                     </tr>

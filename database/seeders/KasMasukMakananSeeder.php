@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\KasMasukProduk;
+use App\Models\KasMasukMakanan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class KasMasukProdukSeeder extends Seeder
+class KasMasukMakananSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -37,7 +37,7 @@ class KasMasukProdukSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            KasMasukProduk::create($item);
+            KasMasukMakanan::create($item);
         }
     }
 }

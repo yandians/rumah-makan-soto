@@ -126,6 +126,6 @@ class MakananController extends Controller
         $makanan->delete();
         $namaMakanan = $makanan->nama;
 
-        return redirect()->back()->with('message', sprintf("Produk dengan nama %s berhasil dihapus!", $namaMakanan));
+        return redirect()->back()->with('message', sprintf("Makanan dengan nama %s berhasil dihapus!", $namaMakanan));
     }
 }

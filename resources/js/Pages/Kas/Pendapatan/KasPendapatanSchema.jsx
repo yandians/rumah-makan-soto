@@ -1,9 +1,9 @@
 import * as Yup from "yup";
 
 const KasPendapatanSchema = Yup.object().shape({
-    produks: Yup.array().of(
+    makanans: Yup.array().of(
         Yup.object().shape({
-            produk_id: Yup.number().required("Produk ID harus diisi"),
+            makanan_id: Yup.number().required("Produk ID harus diisi"),
             jumlah: Yup.number().required("Jumlah harus diisi"),
         })
     ),

@@ -4,16 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKasMasukProdukTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('kas_masuk_produk', function (Blueprint $table) {
+        Schema::create('kas_masuk_makanan', function (Blueprint $table) {
             $table->id();
             $table->string('kode');
             $table->unsignedBigInteger('makanan_id');
@@ -27,11 +25,9 @@ class CreateKasMasukProdukTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('kas_masuk_produk');
+        Schema::dropIfExists('kas_masuk_makanan');
     }
-}
+};

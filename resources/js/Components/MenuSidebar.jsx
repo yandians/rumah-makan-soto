@@ -57,7 +57,6 @@ const customTheme = {
 };
 
 export default function MenuSidebar({ user, ...props }) {
-    console.log("user", user);
     const useLocalStorage = (key, initialValue) => {
         const [storedValue, setStoredValue] = useState(() => {
             try {
