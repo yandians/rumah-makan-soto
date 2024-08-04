@@ -7,8 +7,9 @@ use App\Http\Requests\StoreKasRequest;
 use App\Http\Requests\UpdateKasRequest;
 use App\Models\KasKeluar;
 use App\Models\KasMasuk;
+use App\Models\KasMasukMakanan;
 use App\Models\KasMasukProduk;
-use App\Models\Produk;
+use App\Models\Makanan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -32,7 +33,7 @@ class KasController extends Controller
         if (!empty($searchTerm)) {
             $query->where(function ($q) use ($searchTerm) {
                 $q->where('kode', 'like', '%' . $searchTerm . '%')
-                    ->orWhereHas('kasMasukProduk.produk', function ($q) use ($searchTerm) {
+                    ->orWhereHas('kasMasukMakanan.makanan', function ($q) use ($searchTerm) {
                         $q->where('nama', 'like', '%' . $searchTerm . '%');
                     });
             });
@@ -54,18 +55,18 @@ class KasController extends Controller
 
         $totalKasMasuk = $query->count();
 
-        $kasMasuk = $query->with('kasMasukProduk.produk')->paginate(10);
+        $kasMasuk = $query->with('kasMasukMakanan.makanan')->paginate(10);
 
         $page = $request->input('page');
 
-        $produks = Produk::all();
+        $makanans = Makanan::all();
 
-        $lastKasMasukProduk = KasMasukProduk::where('kode', 'like', 'KSP24%')->orderBy('kode', 'desc')->first();
-        $lastKode = $lastKasMasukProduk ? $lastKasMasukProduk->kode : "KSP24000";
+        $lastKasMasukMakanan = KasMasukMakanan::where('kode', 'like', 'KSP24%')->orderBy('kode', 'desc')->first();
+        $lastKode = $lastKasMasukMakanan ? $lastKasMasukMakanan->kode : "KSP24000";
 
         return Inertia::render('Kas/Pendapatan/Index', [
             'kasMasuk' => $kasMasuk,
-            'produks' => $produks,
+            'makanans' => $makanans,
             'status' => session('status'),
             'searchTerm' => $searchTerm,
             'startDate' => $request->input('startDate'),
@@ -155,7 +156,7 @@ class KasController extends Controller
 
         $totalKasMasuk = $query->count();
 
-        $kasMasuk = $query->with('kasMasukProduk.produk')->get();
+        $kasMasuk = $query->with('kasMasukMakanan.makanan')->get();
 
         return Inertia::render('Kas/Laporan/IndexLaporanPendapatan', [
             'kasMasuk' => $kasMasuk,
@@ -218,7 +219,9 @@ class KasController extends Controller
 
         $query->orderByDesc('updated_at');
 
-        $kas = $query->with('kasKeluar', 'kasMasuk.kasMasukProduk.produk')->get();
+        $kas = $query->with('kasKeluar', 'kasMasuk.kasMasukMakanan.makanan')->get();
+
+        dd($kas);
 
         $page = $request->input('page');
 
@@ -258,19 +261,19 @@ class KasController extends Controller
             ]);
 
             $errors = [];
-            foreach ($request->input('produks') as $index => $produks) {
-                $validator = Validator::make($produks, [
-                    'produk_id' => 'required|integer|min:0',
+            foreach ($request->input('makanans') as $index => $makanans) {
+                $validator = Validator::make($makanans, [
+                    'makanan_id' => 'required|integer|min:0',
                     'jumlah' => 'required|integer|min:0',
                 ]);
 
                 if ($validator->fails()) {
                     return back()->withInput()->withErrors($validator);
                 } else {
-                    KasMasukProduk::create([
+                    KasMasukMakanan::create([
                         'kode' => $request->kode,
-                        'produk_id' => $produks['produk_id'],
-                        'jumlah' => $produks['jumlah'],
+                        'makanan_id' => $makanans['makanan_id'],
+                        'jumlah' => $makanans['jumlah'],
                     ]);
                 }
             }
@@ -332,7 +335,7 @@ class KasController extends Controller
      */
     public function showPendapatan(Kas $kas, $id)
     {
-        $kasMasuk = KasMasuk::with('kasMasukProduk.produk')
+        $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan')
             ->where('id', 'like', $id)
             ->first();
 
@@ -369,22 +372,22 @@ class KasController extends Controller
                 'metode_pembayaran' => $metode_pembayaran,
             ]);
 
-            KasMasukProduk::where('kode', $request->kode)->delete();
+            KasMasukMakanan::where('kode', $request->kode)->delete();
 
             $errors = [];
-            foreach ($request->input('produks') as $index => $produks) {
-                $validator = Validator::make($produks, [
-                    'produk_id' => 'required|integer|min:0',
+            foreach ($request->input('makanans') as $index => $makanans) {
+                $validator = Validator::make($makanans, [
+                    'makanan_id' => 'required|integer|min:0',
                     'jumlah' => 'required|integer|min:0',
                 ]);
 
                 if ($validator->fails()) {
                     return back()->withInput()->withErrors($validator);
                 } else {
-                    KasMasukProduk::create([
+                    KasMasukMakanan::create([
                         'kode' => $request->kode,
-                        'produk_id' => $produks['produk_id'],
-                        'jumlah' => $produks['jumlah'],
+                        'makanan_id' => $makanans['makanan_id'],
+                        'jumlah' => $makanans['jumlah'],
                     ]);
                 }
             }

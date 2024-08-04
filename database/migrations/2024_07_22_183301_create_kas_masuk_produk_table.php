@@ -34,4 +34,8 @@ class CreateKasMasukProdukTable extends Migration
     {
         Schema::dropIfExists('kas_masuk_produk');
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> parent of 525ef68 (update makanan pedapatan)

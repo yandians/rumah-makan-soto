@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('nama', 50)->unique();
             $table->string('kategori', 30);
+<<<<<<< HEAD
             $table->integer('harga', 10);
+=======
+            $table->integer('harga'); // Removed auto_increment primary key
+>>>>>>> parent of 525ef68 (update makanan pedapatan)
             $table->timestamps();
         });
     }
