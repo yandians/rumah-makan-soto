@@ -47,7 +47,7 @@ const customTheme = {
             base: "text-lg xl:text-2xl flex-shrink-0 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white",
             active: "text-blue-700 dark:text-blue-100",
         },
-        base: "flex items-center justify-center rounded-lg p-2 mx-2 2xl:mx-4 text-sm 2xl:text-base font-normal text-gray-900 hover:bg-gray-200",
+        base: "flex items-center justify-center rounded-lg p-2 mx-2 2xl:mx-4 text-sm 2xl:text-base font-normal text-gray-900 cursor-pointer",
         active: "text-blue-700 dark:text-blue-100",
         collapsed: {
             insideCollapse: "group pl-8 transition duration-75",
@@ -95,7 +95,7 @@ export default function MenuSidebar({ user, ...props }) {
             theme={customTheme}
         >
             <div className="flex justify-center items-center w-full font-medium mb-2 mt-4">
-                <a href="#" className="">
+                <a href="/">
                     <img src={logo} alt="Logo" className="" />
                 </a>
             </div>
@@ -132,7 +132,7 @@ export default function MenuSidebar({ user, ...props }) {
                                     active={route().current("produk.index")}
                                 >
                                     <span className="flex items-center justify-between text-sm 2xl:text-base">
-                                        Produk
+                                        Makanan
                                     </span>
                                 </Sidebar.Item>
                             </Link>
@@ -233,7 +233,7 @@ export default function MenuSidebar({ user, ...props }) {
                     )}
                 </Sidebar.ItemGroup>
                 <Sidebar.ItemGroup className="absolute bottom-5 left-0 w-full px-3 py-4">
-                    <Sidebar.Item href="#" icon={HiUser}>
+                    <Sidebar.Item href="#" icon={HiUser} className="cursor-auto">
                         {user.name}
                     </Sidebar.Item>
                     <Link
@@ -244,7 +244,7 @@ export default function MenuSidebar({ user, ...props }) {
                         className="w-full"
                     >
                         <Sidebar.Item icon={HiOutlineLogout}>
-                            <span className="flex items-center justify-between text-sm 2xl:text-base">
+                            <span className="flex items-center justify-between text-sm 2xl:text-base cursor-pointer">
                                 Log Out
                             </span>
                         </Sidebar.Item>
