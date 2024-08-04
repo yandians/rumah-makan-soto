@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('kode', 30)->unique();
             $table->string('nama', 50);
-            $table->integer('jumlah', 10);
-            $table->integer('total', 10);
+            $table->integer('jumlah');
+            $table->integer('total');
             $table->string('metode_pembayaran', 10);
             $table->string('keterangan', 100)->nullable();
             $table->timestamps();
