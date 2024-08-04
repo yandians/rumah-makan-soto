@@ -15,7 +15,7 @@ class CreateKasMasukProdukTable extends Migration
     {
         Schema::create('kas_masuk_produk', function (Blueprint $table) {
             $table->id();
-            $table->string('kode', 30);
+            $table->string('kode');
             $table->unsignedBigInteger('produk_id');
             $table->integer('jumlah');
             $table->timestamps();
