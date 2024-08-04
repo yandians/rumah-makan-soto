@@ -43,44 +43,44 @@ const PrintLaporanPengeluaran = React.forwardRef(({ kasKeluar, date }, ref) => {
     return (
         <div ref={ref} className="print:my-10 print:mx-20 print:text-[9px]">
             <div className="px-10 pt-10 pb-5 text-gray-900 text-lg xl:text-xl font-medium text-center">
-                LAPORAN PENDAPATAN
+                LAPORAN PENGELUARAN
                 <br />
                 {/* Priode {" "} */}
                 {date[0].startDate || date[0].endDate
                     ? date[0].startDate && date[0].endDate
                         ? date[0].startDate.toLocaleDateString("id-ID", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                          }) ===
-                          date[0].endDate.toLocaleDateString("id-ID", {
-                              day: "numeric",
-                              month: "long",
-                              year: "numeric",
-                          })
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                        }) ===
+                            date[0].endDate.toLocaleDateString("id-ID", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                            })
                             ? ` Priode ${date[0].startDate.toLocaleDateString(
-                                  "id-ID",
-                                  {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                  }
-                              )} `
+                                "id-ID",
+                                {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                }
+                            )} `
                             : ` Priode ${date[0].startDate.toLocaleDateString(
-                                  "id-ID",
-                                  {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                  }
-                              )} - ${date[0].endDate.toLocaleDateString(
-                                  "id-ID",
-                                  {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                  }
-                              )}`
+                                "id-ID",
+                                {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                }
+                            )} - ${date[0].endDate.toLocaleDateString(
+                                "id-ID",
+                                {
+                                    day: "numeric",
+                                    month: "long",
+                                    year: "numeric",
+                                }
+                            )}`
                         : ""
                     : ""}
             </div>
