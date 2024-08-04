@@ -16,22 +16,22 @@ class KasMasukProdukSeeder extends Seeder
         $items = [
             [
                 'kode' => 'KSP24001',
-                'produk_id' => 1,
+                'makanan_id' => 1,
                 'jumlah' => 5,
             ],
             [
                 'kode' => 'KSP24001',
-                'produk_id' => 2,
+                'makanan_id' => 2,
                 'jumlah' => 3,
             ],
             [
                 'kode' => 'KSP24002',
-                'produk_id' => 3,
+                'makanan_id' => 3,
                 'jumlah' => 10,
             ],
             [
                 'kode' => 'KSP24003',
-                'produk_id' => 4,
+                'makanan_id' => 4,
                 'jumlah' => 7,
             ],
         ];

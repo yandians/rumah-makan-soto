@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DaftarMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasController;
+use App\Http\Controllers\MakananController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -87,6 +88,14 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::get('/produk/{produk}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
     Route::put('/produk/{produk}', [ProdukController::class, 'update'])->name('produk.update');
     Route::delete('/produk/{produk}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+
+    Route::get('/makanan', [MakananController::class, 'index'])->name('makanan.index');
+    Route::get('/makanan/create', [MakananController::class, 'create'])->name('makanan.create');
+    Route::post('/makanan', [MakananController::class, 'store'])->name('makanan.store');
+    Route::get('/makanan/{id}', [MakananController::class, 'show'])->name('makanan.show');;
+    Route::get('/makanan/{makanan}/edit', [MakananController::class, 'edit'])->name('makanan.edit');
+    Route::put('/makanan/{makanan}', [MakananController::class, 'update'])->name('makanan.update');
+    Route::delete('/makanan/{makanan}', [MakananController::class, 'destroy'])->name('makanan.destroy');
     
     Route::get('/laporan/pendapatan', [KasController::class, 'indexLaporanPendapatan'])->name('kasLaporanPendapatan.index');
     Route::get('/laporan/pengeluaran', [KasController::class, 'indexLaporanPengeluaran'])->name('kasLaporanPengeluaran.index');
