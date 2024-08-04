@@ -16,7 +16,7 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'name' => 'Owner User',
+            'name' => 'Owner',
             'username' => 'owner',
             'email' => 'owner@example.com',
             'level' => 'owner',
@@ -26,10 +26,20 @@ class UsersTableSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'Pegawai User',
+            'name' => 'Pegawai',
             'username' => 'pegawai',
             'email' => 'pegawai@example.com',
             'level' => 'pegawai',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'remember_token' => Str::random(10),
+        ]);
+
+        User::create([
+            'name' => 'Pelanggan',
+            'username' => 'pelanggan',
+            'email' => 'pelanggan@example.com',
+            'level' => 'pelanggan',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),
             'remember_token' => Str::random(10),
