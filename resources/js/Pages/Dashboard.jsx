@@ -1,9 +1,9 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { Card } from "flowbite-react";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
-import { GiReceiveMoney } from "react-icons/gi";
-import { GiPayMoney } from "react-icons/gi";
+import { GiReceiveMoney, GiPayMoney } from "react-icons/gi";
+import { Inertia } from "@inertiajs/inertia";
 
 export default function Dashboard({
     auth,
@@ -47,6 +47,10 @@ export default function Dashboard({
     const userLevel = auth.user.level;
     const periodsToShow = userLevel === "owner" ? ["today", "thisWeek", "thisMonth"] : ["today"];
 
+    const handleCardClick = (period) => {
+        Inertia.get(route("kasLaporanBukuBesar.index"), { period });
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -70,7 +74,7 @@ export default function Dashboard({
                                             {period.label}
                                         </h3>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            <Card>
+                                            <Card onClick={() => handleCardClick(periodKey)} className="cursor-pointer">
                                                 <div className="flex items-center">
                                                     <RiMoneyDollarCircleLine className="text-4xl mr-4 text-gray-600" />
                                                     <div>
@@ -88,7 +92,7 @@ export default function Dashboard({
                                                     <GiReceiveMoney className="text-4xl mr-4 text-gray-600" />
                                                     <div>
                                                         <h5 className="text-2xl font-bold tracking-tight text-gray-600 dark:text-white">
-                                                            Pemasukan
+                                                            Pendapatan
                                                         </h5>
                                                         <p className="font-normal text-gray-600 dark:text-gray-400">
                                                             {formatRupiah(period.pemasukan)}
