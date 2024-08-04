@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('nama', 50)->unique();
             $table->string('kategori', 30);
             $table->integer('harga');
+            $table->string('image');
+            $table->string('deskripsi');
             $table->timestamps();
         });
     }
