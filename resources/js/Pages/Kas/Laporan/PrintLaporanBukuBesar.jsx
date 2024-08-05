@@ -130,18 +130,18 @@ const PrintLaporanBukuBesar = React.forwardRef(({ kas, date }, ref) => {
                                         ) : kas.kode.startsWith("KSP") ? (
                                             <>
                                                 <ul>
-                                                    {kas.kas_masuk.kas_masuk_produk.map(
+                                                    {kas.kas_masuk.kas_masuk_makanan.map(
                                                         (sk) => (
                                                             <li key={sk.id}>
                                                                 {"- "}
                                                                 {
-                                                                    sk.produk
+                                                                    sk.makanan
                                                                         .nama
                                                                 }{" "}
                                                                 (Jumlah :{" "}
                                                                 {sk.jumlah},{" "}
                                                                 {formatRupiah(
-                                                                    sk.produk
+                                                                    sk.makanan
                                                                         .harga
                                                                 )}
                                                                 ){" "}
@@ -169,11 +169,11 @@ const PrintLaporanBukuBesar = React.forwardRef(({ kas, date }, ref) => {
                                                     }
                                                 </Badge>
                                                 {formatRupiah(
-                                                    kas.kas_masuk.kas_masuk_produk.reduce(
+                                                    kas.kas_masuk.kas_masuk_makanan.reduce(
                                                         (total, sk) =>
                                                             total +
                                                             sk.jumlah *
-                                                                sk.produk.harga,
+                                                                sk.makanan.harga,
                                                         0
                                                     )
                                                 )}
@@ -211,11 +211,11 @@ const PrintLaporanBukuBesar = React.forwardRef(({ kas, date }, ref) => {
                                             <>
                                                 {formatRupiah(
                                                     (saldo +=
-                                                        kas.kas_masuk.kas_masuk_produk.reduce(
+                                                        kas.kas_masuk.kas_masuk_makanan.reduce(
                                                             (total, sk) =>
                                                                 total +
                                                                 sk.jumlah *
-                                                                    sk.produk
+                                                                    sk.makanan
                                                                         .harga,
                                                             0
                                                         ))

@@ -21,8 +21,8 @@ class KasMasuk extends Model
         return $this->belongsTo(Kas::class, 'kode', 'kode');
     }
     
-    public function kasMasukProduk()
+    public function kasMasukMakanan()
     {
-        return $this->hasMany(KasMasukProduk::class, 'kode', 'kode');
+        return $this->hasMany(KasMasukMakanan::class, 'kode', 'kode');
     }
 }

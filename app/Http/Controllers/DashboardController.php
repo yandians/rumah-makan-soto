@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\KasKeluar;
-use App\Models\KasMasuk;
-use App\Models\KasMasukProduk;
+use App\Models\KasMasukMakanan;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
@@ -19,19 +17,22 @@ class DashboardController extends Controller
         $startOfMonth = $today->copy()->startOfMonth();
         $endOfToday = $today->copy()->endOfDay();
 
-        $totalKasMasukHariIni = KasMasukProduk::whereDate('kas_masuk_produk.updated_at', $today)
-            ->join('produks', 'kas_masuk_produk.produk_id', '=', 'produks.id')
-            ->selectRaw('SUM(kas_masuk_produk.jumlah * produks.harga) as total')
+        $totalKasMasukHariIni = KasMasukMakanan
+        ::whereDate('kas_masuk_makanan.updated_at', $today)
+            ->join('makanans', 'kas_masuk_makanan.makanan_id', '=', 'makanans.id')
+            ->selectRaw('SUM(kas_masuk_makanan.jumlah * makanans.harga) as total')
             ->value('total');
 
-        $totalKasMasukMingguIni = KasMasukProduk::whereBetween('kas_masuk_produk.updated_at', [$startOfWeek, $endOfToday])
-            ->join('produks', 'kas_masuk_produk.produk_id', '=', 'produks.id')
-            ->selectRaw('SUM(kas_masuk_produk.jumlah * produks.harga) as total')
+        $totalKasMasukMingguIni = KasMasukMakanan
+        ::whereBetween('kas_masuk_makanan.updated_at', [$startOfWeek, $endOfToday])
+            ->join('makanans', 'kas_masuk_makanan.makanan_id', '=', 'makanans.id')
+            ->selectRaw('SUM(kas_masuk_makanan.jumlah * makanans.harga) as total')
             ->value('total');
 
-        $totalKasMasukBulanIni = KasMasukProduk::whereBetween('kas_masuk_produk.updated_at', [$startOfMonth, $endOfToday])
-            ->join('produks', 'kas_masuk_produk.produk_id', '=', 'produks.id')
-            ->selectRaw('SUM(kas_masuk_produk.jumlah * produks.harga) as total')
+        $totalKasMasukBulanIni = KasMasukMakanan
+        ::whereBetween('kas_masuk_makanan.updated_at', [$startOfMonth, $endOfToday])
+            ->join('makanans', 'kas_masuk_makanan.makanan_id', '=', 'makanans.id')
+            ->selectRaw('SUM(kas_masuk_makanan.jumlah * makanans.harga) as total')
             ->value('total');
 
 

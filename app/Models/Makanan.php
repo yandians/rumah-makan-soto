@@ -14,11 +14,13 @@ class Makanan extends Model
     protected $fillable = [
         'nama',
         'kategori',
-        'harga'
+        'harga',
+        'image',
+        'deskripsi'
     ];
 
-    public function kasMasukProduk()
+    public function kasMasukMakanan()
     {
-        return $this->hasMany(KasMasukProduk::class);
+        return $this->hasMany(KasMasukMakanan::class);
     }
 }

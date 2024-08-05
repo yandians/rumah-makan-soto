@@ -43,7 +43,7 @@ function formatRupiah(angka) {
 
 export default function Index({
     auth,
-    produks,
+    makanans,
     lastKode,
     kasMasuk,
     totalKasMasuk,
@@ -249,7 +249,7 @@ export default function Index({
                                 </form>
                             </div>
                             <div className="ml-4">
-                                <Create produks={produks} lastKode={lastKode} />
+                                <Create makanans={makanans} lastKode={lastKode} />
                             </div>
                         </div>
 
@@ -291,13 +291,13 @@ export default function Index({
                                                 </TableCell>
                                                 <TableCell>
                                                     <ul>
-                                                        {kasMasuk.kas_masuk_produk.map(
+                                                        {kasMasuk.kas_masuk_makanan.map(
                                                             (sk) => (
                                                                 <li key={sk.id}>
                                                                     {"- "}
                                                                     {
                                                                         sk
-                                                                            .produk
+                                                                            .makanan
                                                                             .nama
                                                                     }{" "}
                                                                     {/* Menampilkan nama produk */}{" "}
@@ -306,7 +306,7 @@ export default function Index({
                                                                     Harga:{" "}
                                                                     {formatRupiah(
                                                                         sk
-                                                                            .produk
+                                                                            .makanan
                                                                             .harga
                                                                     )}
                                                                     ){" "}
@@ -318,11 +318,11 @@ export default function Index({
                                                 <TableCell>
                                                 <Badge color="gray" className="w-fit">{kasMasuk.metode_pembayaran}</Badge>
                                                     {formatRupiah(
-                                                        kasMasuk.kas_masuk_produk.reduce(
+                                                        kasMasuk.kas_masuk_makanan.reduce(
                                                             (total, sk) =>
                                                                 total +
                                                                 sk.jumlah *
-                                                                    sk.produk
+                                                                    sk.makanan
                                                                         .harga,
                                                             0
                                                         )
@@ -399,7 +399,7 @@ export default function Index({
                 <Edit
                     show={showEditModal}
                     onClose={handleEditModalClose}
-                    produks={produks}
+                    makanans={makanans}
                     idKasMasuk={idKasMasuk}
                 />
             )}
@@ -407,7 +407,7 @@ export default function Index({
                 <Show
                     show={showModal}
                     onClose={handleModalClose}
-                    produks={produks}
+                    makanans={makanans}
                     idKasMasuk={idKasMasuk}
                 />
             )}

@@ -39,8 +39,8 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
     const totalPendapatan = kasMasuk.reduce((total, kas) => {
         return (
             total +
-            kas.kas_masuk_produk.reduce((subTotal, sk) => {
-                return subTotal + sk.jumlah * sk.produk.harga;
+            kas.kas_masuk_makanan.reduce((subTotal, sk) => {
+                return subTotal + sk.jumlah * sk.makanan.harga;
             }, 0)
         );
     }, 0);
@@ -122,14 +122,14 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
                                     </TableCell>
                                     <TableCell>
                                         <ul>
-                                            {kasMasuk.kas_masuk_produk.map(
+                                            {kasMasuk.kas_masuk_makanan.map(
                                                 (sk) => (
                                                     <li key={sk.id}>
                                                         {"- "}
-                                                        {sk.produk.nama}{" "}
+                                                        {sk.makanan.nama}{" "}
                                                         (Jumlah : {sk.jumlah}, {" "}
                                                         {formatRupiah(
-                                                            sk.produk.harga
+                                                            sk.makanan.harga
                                                         )}
                                                         ){" "}
                                                     </li>
@@ -145,10 +145,10 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
                                             {kasMasuk.metode_pembayaran}
                                         </Badge>
                                         {formatRupiah(
-                                            kasMasuk.kas_masuk_produk.reduce(
+                                            kasMasuk.kas_masuk_makanan.reduce(
                                                 (total, sk) =>
                                                     total +
-                                                    sk.jumlah * sk.produk.harga,
+                                                    sk.jumlah * sk.makanan.harga,
                                                 0
                                             )
                                         )}

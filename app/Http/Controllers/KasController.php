@@ -10,6 +10,7 @@ use App\Models\KasMasuk;
 use App\Models\KasMasukMakanan;
 use App\Models\KasMasukProduk;
 use App\Models\Makanan;
+use App\Models\Produk;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
@@ -220,8 +221,6 @@ class KasController extends Controller
         $query->orderByDesc('updated_at');
 
         $kas = $query->with('kasKeluar', 'kasMasuk.kasMasukMakanan.makanan')->get();
-
-        dd($kas);
 
         $page = $request->input('page');
 
@@ -455,7 +454,7 @@ class KasController extends Controller
 
             KasMasuk::where('kode', $kode)->delete();
 
-            KasMasukProduk::where('kode', $kode)->delete();
+            KasMasukMakanan::where('kode', $kode)->delete();
 
             DB::commit();
 

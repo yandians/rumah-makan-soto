@@ -18,6 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call([KasSeeder::class]);
         $this->call([KasKeluarSeeder::class]);
         $this->call([KasMasukSeeder::class]);
-        $this->call([KasMasukProdukSeeder::class]);
+        $this->call([KasMasukMakananSeeder::class]);
     }
 }

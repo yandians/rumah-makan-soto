@@ -15,10 +15,10 @@ function formatRupiah(angka) {
     return formatter.format(angka);
 }
 
-export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
+export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) {
     const { data, setData, put, errors, reset } = useForm({
         kode: "",
-        produks: [], // Pastikan produks diinisialisasi dengan array kosong
+        makanans: [], // Pastikan produks diinisialisasi dengan array kosong
         metode_pembayaran: "",
     });
 
@@ -36,7 +36,7 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
                     setData({
                         ...data,
                         kode: kasMasukData.kode,
-                        produks: kasMasukData.kas_masuk_produk || [], // Pastikan produks tidak undefined
+                        makanans: kasMasukData.kas_masuk_makanan || [], // Pastikan produks tidak undefined
                         metode_pembayaran: kasMasukData.metode_pembayaran,
                     });
                 })
@@ -45,6 +45,9 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
                 });
         }
     }, [idKasMasuk]); // Tambahkan idKasMasuk ke dependencies
+
+    console.log("kas_masuk", kasMasuk)
+    console.log("data", data)
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [selectedProduk, setSelectedProduk] = useState(null);
@@ -65,21 +68,21 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
     const handleAddProduk = () => {
         if (selectedProduk) {
             const newProduk = {
-                produk_id: selectedProduk.value,
+                makanan_id: selectedProduk.value,
                 nama: selectedProduk.label,
                 harga: selectedProduk.harga,
                 jumlah: jumlah,
             };
-            setData({ ...data, produks: [...data.produks, newProduk] });
+            setData({ ...data, makanans: [...data.makanans, newProduk] });
             setSelectedProduk(null);
             setJumlah(1);
         }
     };
 
     const handleRemoveProduk = (index) => {
-        const newProduks = [...data.produks];
+        const newProduks = [...data.makanans];
         newProduks.splice(index, 1);
-        setData({ ...data, produks: newProduks });
+        setData({ ...data, makanans: newProduks });
     };
 
     const handleReset = () => {
@@ -91,6 +94,7 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
     const [validationErrors, setValidationErrors] = useState({});
 
     const handleSubmit = async (e) => {
+        console.log(data)
         e.preventDefault();
         try {
             await KasPendapatanSchema.validate(data, { abortEarly: false });
@@ -111,26 +115,28 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
         }
     };
 
+    console.log(errors)
+
     const optionsProduk = useMemo(() => {
-        return produks
-            .filter((produk) => {
-                return !data.produks.some((p) => p.produk_id === produk.id);
+        return makanans
+            .filter((makanan) => {
+                return !data.makanans.some((p) => p.makanan_id === makanan.id);
             })
-            .map((produk) => ({
-                value: produk.id,
-                label: produk.nama,
-                harga: produk.harga,
+            .map((makanan) => ({
+                value: makanan.id,
+                label: makanan.nama,
+                harga: makanan.harga,
             }));
-    }, [produks, data.produks]);
+    }, [makanans, data.makanans]);
 
     const totalPembayaran = useMemo(() => {
-        return data.produks.reduce((total, produk) => {
-            const hargaProduk = produk.harga
-                ? produk.harga
-                : produk.produk.harga * produk.jumlah;
+        return data.makanans.reduce((total, makanan) => {
+            const hargaProduk = makanan.harga
+                ? makanan.harga
+                : makanan.makanan.harga * makanan.jumlah;
             return total + hargaProduk;
         }, 0);
-    }, [data.produks]);
+    }, [data.makanans]);
 
     return (
         <>
@@ -248,29 +254,29 @@ export default function Edit({ produks, lastKode, show, onClose, idKasMasuk }) {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {data.produks.map((produk, index) => (
+                                    {data.makanans.map((makanan, index) => (
                                         <tr key={index}>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {produk.nama
-                                                    ? produk.nama
-                                                    : produk.produk.nama}
+                                                {makanan.nama
+                                                    ? makanan.nama
+                                                    : makanan.makanan.nama}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {formatRupiah(
-                                                    produk.harga
-                                                        ? produk.harga
-                                                        : produk.produk.harga
+                                                    makanan.harga
+                                                        ? makanan.harga
+                                                        : makanan.makanan.harga
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {produk.jumlah}
+                                                {makanan.jumlah}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {formatRupiah(
-                                                    produk.harga
-                                                        ? produk.harga
-                                                        : produk.produk.harga *
-                                                              produk.jumlah
+                                                    makanan.harga
+                                                        ? makanan.harga
+                                                        : makanan.makanan.harga *
+                                                              makanan.jumlah
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

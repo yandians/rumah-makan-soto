@@ -14,7 +14,7 @@ function formatRupiah(angka) {
     return formatter.format(angka);
 }
 
-export default function Create({ produks, lastKode }) {
+export default function Create({ makanans, lastKode }) {
     const modifyString = (str) => {
         let lastThreeDigits = str.slice(-3);
         let incrementedDigits = (parseInt(lastThreeDigits) + 1)
@@ -28,7 +28,7 @@ export default function Create({ produks, lastKode }) {
 
     const { data, setData, post, errors, reset } = useForm({
         kode: modifiedString,
-        produks: [],
+        makanans: [],
         metode_pembayaran: "", // Default kosong, karena pilihannya akan dipilih dari react-select
     });
 
@@ -51,21 +51,21 @@ export default function Create({ produks, lastKode }) {
     const handleAddProduk = () => {
         if (selectedProduk) {
             const newProduk = {
-                produk_id: selectedProduk.value,
+                makanan_id: selectedProduk.value,
                 nama: selectedProduk.label,
                 harga: selectedProduk.harga,
                 jumlah: jumlah,
             };
-            setData({ ...data, produks: [...data.produks, newProduk] });
+            setData({ ...data, makanans: [...data.makanans, newProduk] });
             setSelectedProduk(null);
             setJumlah(1);
         }
     };
 
     const handleRemoveProduk = (index) => {
-        const newProduks = [...data.produks];
+        const newProduks = [...data.makanans];
         newProduks.splice(index, 1);
-        setData({ ...data, produks: newProduks });
+        setData({ ...data, makanans: newProduks });
     };
 
     const handleReset = () => {
@@ -98,22 +98,22 @@ export default function Create({ produks, lastKode }) {
     };
 
     const optionsProduk = useMemo(() => {
-        return produks
-            .filter((produk) => {
-                return !data.produks.some((p) => p.produk_id === produk.id);
+        return makanans
+            .filter((makanan) => {
+                return !data.makanans.some((p) => p.makanan_id === makanan.id);
             })
-            .map((produk) => ({
-                value: produk.id,
-                label: produk.nama,
-                harga: produk.harga,
+            .map((makanan) => ({
+                value: makanan.id,
+                label: makanan.nama,
+                harga: makanan.harga,
             }));
-    }, [produks, data.produks]);
+    }, [makanans, data.makanans]);
 
     const totalPembayaran = useMemo(() => {
-        return data.produks.reduce((total, produk) => {
-            return total + produk.harga * produk.jumlah;
+        return data.makanans.reduce((total, makanan) => {
+            return total + makanan.harga * makanan.jumlah;
         }, 0);
-    }, [data.produks]);
+    }, [data.makanans]);
 
 
     return (
@@ -239,19 +239,19 @@ export default function Create({ produks, lastKode }) {
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
-                                    {data.produks.map((produk, index) => (
+                                    {data.makanans.map((makanan, index) => (
                                         <tr key={index}>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {produk.nama}
+                                                {makanan.nama}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {formatRupiah(produk.harga)}
+                                                {formatRupiah(makanan.harga)}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {produk.jumlah}
+                                                {makanan.jumlah}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {formatRupiah(produk.harga * produk.jumlah)}
+                                                {formatRupiah(makanan.harga * makanan.jumlah)}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <Button

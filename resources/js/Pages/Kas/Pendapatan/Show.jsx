@@ -14,9 +14,8 @@ import { HiPrinter } from "react-icons/hi";
 export default function Show({ show, onClose, idKasMasuk }) {
     const { data, setData, put, errors, reset } = useForm({
         kode: "",
-        produks: [],
+        makanans: [], // Pastikan produks diinisialisasi dengan array kosong
         metode_pembayaran: "",
-        updated_at: "",
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
@@ -29,22 +28,20 @@ export default function Show({ show, onClose, idKasMasuk }) {
                     const kasMasukData = response.data;
                     setKasMasuk(kasMasukData);
 
+                    // Update data dengan nilai dari kasMasukData
                     setData({
                         ...data,
                         kode: kasMasukData.kode,
-                        produks: kasMasukData.kas_masuk_produk || [],
+                        makanans: kasMasukData.kas_masuk_makanan || [], // Pastikan produks tidak undefined
                         metode_pembayaran: kasMasukData.metode_pembayaran,
-                        updated_at: kasMasukData.updated_at,
                     });
                 })
                 .catch((error) => {
                     console.error("Error fetching produk:", error);
                 });
         }
-    }, [idKasMasuk]);
-
-    console.log("data", data.updated_at);
-
+    }, [idKasMasuk]); // Tambahkan idKasMasuk ke dependencies
+    
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
