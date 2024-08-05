@@ -46,9 +46,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-    Route::get('/linkstorage', function () {
-        Artisan::call('storage:link');
-    });
+    Route::get('/generate', function(){
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        echo 'ok';
+     });
+
+     Route::get('/generate-link', function () {
+        $targetFolder = base_path().'/storage/app/public';
+        $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage';
+        symlink($targetFolder, $linkFolder);
+     });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
