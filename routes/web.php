@@ -5,6 +5,7 @@ use App\Http\Controllers\DaftarMenuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KasController;
 use App\Http\Controllers\MakananController;
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
@@ -63,6 +64,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengeluaran/{id}', [KasController::class, 'showPengeluaran'])->name('kasPengeluaran.show');;
     Route::put('/pengeluaran/{pengeluaran}', [KasController::class, 'updatePengeluaran'])->name('kasPengeluaran.update');
     Route::delete('/pengeluaran/{kode}', [KasController::class, 'destroyPengeluaran'])->name('kasPengeluaran.destroy');
+
+    Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
+    Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');
+    Route::get('/pesan/{id}', [PesanController::class, 'show'])->name('pesan.show');;
+    Route::put('/pesan/{pesan}', [PesanController::class, 'update'])->name('pesan.update');
+    Route::delete('/pesan/{kode}', [PesanController::class, 'destroy'])->name('pesan.destroy');
 
     Route::get('/kas/create', [KasController::class, 'create'])->name('kas.create');
     Route::post('/kas', [KasController::class, 'store'])->name('kas.store');

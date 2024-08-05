@@ -21,7 +21,7 @@ class MakanansSeeder extends Seeder
                 'nama' => 'Soto Ayam',
                 'harga' => 15000,
                 'kategori' => 'Makanan',
-                'image' => $faker->imageUrl(640, 480, 'food', true),
+                'image' => '/storage',
                 'deskripsi' => $faker->sentence,
                 'created_at' => now(),
                 'updated_at' => now(),

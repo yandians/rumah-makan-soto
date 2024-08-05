@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('nama');
             $table->unsignedBigInteger('makanan_id');
             $table->integer('jumlah');
-            $table->string('status');
             $table->timestamps();
 
             $table->foreign('makanan_id')->references('id')->on('makanans')->onDelete('cascade');
