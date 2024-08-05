@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Button, Navbar, Card, Modal, Spinner } from "flowbite-react";
+import { Button, Navbar, Card, Modal, Spinner, Badge } from "flowbite-react";
 import { HiCheckCircle } from "react-icons/hi";
 import logo from "../Assets/Logo Full Rumah Makan Soto.png";
 import { HiUser, HiShoppingBag } from "react-icons/hi";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const Pesanan = ({ orders, onOrder }) => {
-    const totalHarga = orders.reduce((total, order) => total + order.harga, 0);
+const Pesanan = ({ orders, onOrder, orderStatus }) => {
+    const totalHarga = orders.reduce((total, order) => total + order.harga * order.jumlah, 0);
 
     return (
         <div className="absolute right-0 mt-2 w-64 bg-white border border-gray-200 rounded shadow-lg p-4">
@@ -13,8 +15,8 @@ const Pesanan = ({ orders, onOrder }) => {
                 {orders.length > 0 ? (
                     orders.map((order, index) => (
                         <li key={index} className="p-2 hover:bg-gray-100 flex justify-between">
-                            <span>{order.nama}</span>
-                            <span>Rp {order.harga}</span>
+                            <span>{order.nama} x{order.jumlah}</span>
+                            <span>Rp {order.harga * order.jumlah}</span>
                         </li>
                     ))
                 ) : (
@@ -27,9 +29,16 @@ const Pesanan = ({ orders, onOrder }) => {
                         <span className="font-bold">Total:</span>
                         <span className="font-bold">Rp {totalHarga}</span>
                     </div>
-                    <Button className="mt-4 w-full" onClick={onOrder}>
-                        Pesan Sekarang
-                    </Button>
+                    {!orderStatus && (
+                        <Button className="mt-4 w-full" onClick={onOrder}>
+                            Pesan Sekarang
+                        </Button>
+                    )}
+                    {orderStatus && (
+                        <div className="mt-4 p-2 border-t border-gray-200">
+                            <p className="text-center font-semibold">{orderStatus}</p>
+                        </div>
+                    )}
                 </>
             )}
         </div>
@@ -41,26 +50,38 @@ export default function DaftarMakanan({ makanans, auth }) {
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [orderStatus, setOrderStatus] = useState(null);
 
     const handleShoppingBagClick = () => {
         setShowOrders(!showOrders);
     };
 
     const handleAddToCart = (product) => {
-        setOrders([...orders, product]);
+        const existingOrderIndex = orders.findIndex(order => order.id === product.id);
+        if (existingOrderIndex !== -1) {
+            const updatedOrders = [...orders];
+            updatedOrders[existingOrderIndex].jumlah += 1;
+            setOrders(updatedOrders);
+        } else {
+            setOrders([...orders, { ...product, jumlah: 1 }]);
+        }
+
+        toast.success("Berhasil Menambahkan Pesanan!");
     };
 
     const handleOrder = () => {
         setIsLoading(true);
         setShowModal(true);
+        setOrderStatus("Pesanan sedang diproses");
         setTimeout(() => {
             setIsLoading(false);
             setTimeout(() => {
                 setShowModal(false);
-                setOrders([]); // Mengubah data pesanan menjadi null setelah menekan "pesan sekarang"
             }, 3000);
         }, 2000);
     };
+
+    const totalOrders = orders.reduce((total, order) => total + order.jumlah, 0);
 
     const userRole = auth.user ? auth.user.level : null;
 
@@ -85,7 +106,12 @@ export default function DaftarMakanan({ makanans, auth }) {
                                         className="h-10 w-10 text-black text-opacity-60 cursor-pointer"
                                         onClick={handleShoppingBagClick}
                                     />
-                                    {showOrders && <Pesanan orders={orders} onOrder={handleOrder} />}
+                                    {totalOrders > 0 && (
+                                        <Badge className="absolute top-0 right-0 bg-red-600 text-white">
+                                            {totalOrders}
+                                        </Badge>
+                                    )}
+                                    {showOrders && <Pesanan orders={orders} onOrder={handleOrder} orderStatus={orderStatus} />}
                                 </div>
                             )}
                         </div>
@@ -96,6 +122,8 @@ export default function DaftarMakanan({ makanans, auth }) {
                     )}
                 </div>
             </Navbar>
+
+            <ToastContainer />
 
             {/* Produk Section */}
             <section className="pt-10 bg-gray-100 pb-20">
@@ -136,7 +164,7 @@ export default function DaftarMakanan({ makanans, auth }) {
             {/* Order Modal */}
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <Modal.Header className="bg-green-500 text-white">
-                    Setatus Pesanan
+                    Status Pesanan
                 </Modal.Header>
                 <Modal.Body className="text-center">
                     {isLoading ? (

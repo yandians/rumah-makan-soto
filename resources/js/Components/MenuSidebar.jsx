@@ -7,6 +7,7 @@ import {
     HiOutlineLogout,
     HiChartPie,
     HiUser,
+    HiOutlineShoppingBag
 } from "react-icons/hi";
 import { GiExpense } from "react-icons/gi";
 import { BiFoodMenu } from "react-icons/bi";
@@ -191,6 +192,24 @@ export default function MenuSidebar({ user, ...props }) {
                         </>
                     ) : (
                         <>
+                            <Link
+                                href="/pesan"
+                                method="get"
+                                as="button"
+                                type="button"
+                                className="w-full"
+                            >
+                                <Sidebar.Item
+                                    icon={HiOutlineShoppingBag}
+                                    active={route().current(
+                                        "pesan.index"
+                                    )}
+                                >
+                                    <span className="flex items-center justify-between text-sm 2xl:text-base">
+                                        Pesanan
+                                    </span>
+                                </Sidebar.Item>
+                            </Link>
                             <Link
                                 href="/pendapatan"
                                 method="get"
