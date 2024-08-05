@@ -81,7 +81,7 @@ class MakananController extends Controller
                 ->first();
 
             if (!$MakananData) {
-                return response()->json(['message' => 'Produk not found.'], 404);
+                return response()->json(['message' => 'Makanan not found.'], 404);
             }
 
             return response()->json($MakananData);

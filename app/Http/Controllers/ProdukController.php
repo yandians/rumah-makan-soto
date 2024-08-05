@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Produk;
 use App\Http\Requests\StoreProdukRequest;
 use App\Http\Requests\UpdateProdukRequest;
+use App\Models\Makanan;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class ProdukController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Produk::query();
+        $query = Makanan::query();
         if ($request->has('search')) {
             $searchTerm = $request->input('search');
             $query->where(function ($q) use ($searchTerm) {
@@ -56,7 +56,7 @@ class ProdukController extends Controller
     public function store(StoreProdukRequest $request)
     {
         try {
-            $produk = new Produk();
+            $produk = new Makanan();
             $produk->nama = $request['nama'];
             $produk->kategori = $request['kategori'];
             $produk->harga = $request['harga'];
@@ -74,10 +74,10 @@ class ProdukController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Produk $produk, $id)
+    public function show(Makanan $produk, $id)
     {
         try {
-            $ProdukData = Produk::where('id', $id)
+            $ProdukData = Makanan::where('id', $id)
                 ->orderByDesc('id')
                 ->first();
 
@@ -94,7 +94,7 @@ class ProdukController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Produk $produk)
+    public function edit(Makanan $makanan)
     {
         //
     }
@@ -102,7 +102,7 @@ class ProdukController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProdukRequest $request, Produk $produk)
+    public function update(UpdateProdukRequest $request, Makanan $produk)
     {
         try {
             $produk->nama = $request->nama;
@@ -123,7 +123,7 @@ class ProdukController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Produk $produk)
+    public function destroy(Makanan $produk)
     {
         $produk->delete();
         $namaProduk = $produk->nama;
