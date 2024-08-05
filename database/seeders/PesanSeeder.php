@@ -39,14 +39,12 @@ class PesanSeeder extends Seeder
         $kasMasukData = [
             [
                 'kode' => 'PSN001',
-                'metode_pembayaran' => $faker->randomElement(['Tunai', 'Debit']),
                 'status' => 'Pending',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'kode' => 'KSP24004',
-                'metode_pembayaran' => $faker->randomElement(['Tunai', 'Debit']),
                 'status' => $faker->randomElement(['Completed']),
                 'created_at' => now(),
                 'updated_at' => now(),

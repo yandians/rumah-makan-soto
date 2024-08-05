@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('nama', 50);
             $table->integer('jumlah');
             $table->integer('total');
-            $table->string('metode_pembayaran', 10);
             $table->string('keterangan', 100)->nullable();
             $table->timestamps();
 
