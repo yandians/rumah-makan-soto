@@ -136,7 +136,9 @@ class KasController extends Controller
 
     public function indexLaporanPendapatan(Request $request)
     {
-        $query = KasMasuk::query();
+        $query = KasMasuk::query()
+            ->with('kasMasukMakanan.makanan')
+            ->where('kode', 'not like', 'PSN%');
 
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
@@ -201,7 +203,8 @@ class KasController extends Controller
 
     public function indexLaporanBukuBesar(Request $request)
     {
-        $query = Kas::query();
+        $query = Kas::query()
+            ->where('kode', 'not like', 'PSN%');
 
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
@@ -308,7 +311,6 @@ class KasController extends Controller
                 'nama' => $request->nama,
                 'jumlah' => $request->jumlah,
                 'total' => $request->total,
-                'metode_pembayaran' => $request->metode_pembayaran,
                 'keterangan' => $request->keterangan,
             ]);
 
@@ -334,11 +336,11 @@ class KasController extends Controller
      */
     public function showPendapatan(Kas $kas, $id)
     {
-        
+
         $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan', 'kasMasukPesan.makanan')
-        ->where('kode', 'like', $id)
-        ->first();
-        
+            ->where('kode', 'like', $id)
+            ->first();
+
         // dd($kasMasuk);
 
         if (!$kasMasuk) {
@@ -422,7 +424,6 @@ class KasController extends Controller
                 'nama' => $request->nama,
                 'jumlah' => $request->jumlah,
                 'total' => $request->total,
-                'metode_pembayaran' => $request->metode_pembayaran,
                 'keterangan' => $request->keterangan,
             ]);
 

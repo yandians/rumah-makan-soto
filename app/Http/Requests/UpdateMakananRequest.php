@@ -19,10 +19,42 @@ class UpdateMakananRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
+    {
+        $makananId = $this->route('makanan');
+
+        // dd($makananId->id);
+
+        return [
+            'nama' => [
+                'required',
+                'string',
+                'max:50',
+                'unique:makanans,nama, ' . $makananId->id,
+            ],
+            'kategori' => 'required|string|max:30',
+            'harga' => 'required|integer|min:1',
+            'image' => 'required',
+            'deskripsi' => 'required|string',
+        ];
+    }
+
+    public function messages()
     {
         return [
-            //
+            'nama.required' => 'Nama makanan wajib diisi.',
+            'nama.string' => 'Nama makanan harus berupa teks.',
+            'nama.max' => 'Nama makanan tidak boleh lebih dari 50 karakter.',
+            'nama.unique' => 'Nama makanan sudah ada.',
+            'kategori.required' => 'Kategori makanan wajib diisi.',
+            'kategori.string' => 'Kategori makanan harus berupa teks.',
+            'kategori.max' => 'Kategori makanan tidak boleh lebih dari 30 karakter.',
+            'harga.required' => 'Harga makanan wajib diisi.',
+            'harga.integer' => 'Harga makanan harus berupa angka.',
+            'harga.min' => 'Harga makanan tidak boleh kurang dari 1.',
+            'image.required' => 'URL gambar makanan wajib diisi.',
+            'deskripsi.required' => 'Deskripsi makanan wajib diisi.',
+            'deskripsi.string' => 'Deskripsi makanan harus berupa teks.',
         ];
     }
 }

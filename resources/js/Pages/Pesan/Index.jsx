@@ -15,9 +15,12 @@ export default function Index({
     searchTerm: initialSearchTerm,
     pageTerm,
 }) {
-    const { data, setData, post, errors, processing, reset } = useForm({
+    const { data, setData, put, errors, processing, reset } = useForm({
+        // pesan: [
+        //     { nama: "yusseno", produk_id: 1, jumlah: 10 }
+        // ],
         pesan: [
-            { kode: "001", nama: "yusseno", makanan_id: 1, jumlah: 10, status: "Menunggu Pembayaran" },
+            { kode: "001", nama: "yusseno1", makanan_id: 1, jumlah: 10, status:'paid', status: "Menunggu Pembayaran" },
             { kode: "002", nama: "johndoe", makanan_id: 2, jumlah: 5, status: "Selesai" },
             // Tambahkan data pesanan lainnya sesuai kebutuhan
         ],
@@ -53,7 +56,11 @@ export default function Index({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            post("/pesan")
+            await put(`/pesan/${kode}`, {
+                onSuccess: () => {
+                    reset();
+                },
+            });
         } catch (err) {
             if (err.inner) {
                 const newErrors = {};

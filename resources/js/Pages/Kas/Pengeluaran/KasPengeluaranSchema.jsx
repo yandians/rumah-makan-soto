@@ -9,7 +9,6 @@ const KasPengeluaranSchema = Yup.object().shape({
     total: Yup.number()
         .required("Total harus diisi")
         .moreThan(0, "Total harus lebih dari 0"),
-    metode_pembayaran: Yup.string().required("Metode pembayaran harus dipilih"),
     keterangan: Yup.string().nullable(),
 });
 
