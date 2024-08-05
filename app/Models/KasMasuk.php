@@ -14,6 +14,7 @@ class KasMasuk extends Model
     protected $fillable = [
         'kode',
         'metode_pembayaran',
+        'status'
     ];
 
     public function kas()
@@ -24,5 +25,9 @@ class KasMasuk extends Model
     public function kasMasukMakanan()
     {
         return $this->hasMany(KasMasukMakanan::class, 'kode', 'kode');
+    }
+    public function kasMasukPesan()
+    {
+        return $this->hasMany(Pesan::class, 'kode', 'kode');
     }
 }

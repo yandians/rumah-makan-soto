@@ -56,7 +56,7 @@ class KasController extends Controller
 
         $totalKasMasuk = $query->count();
 
-        $kasMasuk = $query->with('kasMasukMakanan.makanan')->paginate(10);
+        $kasMasuk = $query->with('kasMasukMakanan.makanan', 'kasMasukPesan.makanan')->paginate(10);
 
         $page = $request->input('page');
 
@@ -334,9 +334,12 @@ class KasController extends Controller
      */
     public function showPendapatan(Kas $kas, $id)
     {
-        $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan')
-            ->where('id', 'like', $id)
-            ->first();
+        
+        $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan', 'kasMasukPesan.makanan')
+        ->where('kode', 'like', $id)
+        ->first();
+        
+        // dd($kasMasuk);
 
         if (!$kasMasuk) {
             return response()->json(['message' => 'Kas masuk not found.'], 404);

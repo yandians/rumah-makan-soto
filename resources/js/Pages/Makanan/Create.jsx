@@ -89,7 +89,6 @@ export default function Create() {
                 },
             });
         } catch (err) {
-            console.log("err", err)
             if (err.inner) {
                 const newErrors = {};
                 err.inner.forEach((error) => {
@@ -99,7 +98,6 @@ export default function Create() {
             }
         }
     };
-    console.log("error", errors)
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];

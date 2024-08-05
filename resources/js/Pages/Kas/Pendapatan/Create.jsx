@@ -29,7 +29,7 @@ export default function Create({ makanans, lastKode }) {
     const { data, setData, post, errors, reset } = useForm({
         kode: modifiedString,
         makanans: [],
-        metode_pembayaran: "", // Default kosong, karena pilihannya akan dipilih dari react-select
+        metode_pembayaran: "",
     });
 
     const [openModalCreate, setOpenModalCreate] = useState(false);

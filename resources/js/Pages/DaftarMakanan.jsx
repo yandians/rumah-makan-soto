@@ -41,7 +41,6 @@ export default function DaftarMakanan({ makanans, auth }) {
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    console.log(makanans);
 
     const handleShoppingBagClick = () => {
         setShowOrders(!showOrders);

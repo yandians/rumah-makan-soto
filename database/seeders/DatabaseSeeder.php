@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use Database\Seeders\PesanSeeder as SeedersPesanSeeder;
 use Illuminate\Database\Seeder;
+use PesanSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +21,6 @@ class DatabaseSeeder extends Seeder
         $this->call([KasKeluarSeeder::class]);
         $this->call([KasMasukSeeder::class]);
         $this->call([KasMasukMakananSeeder::class]);
+        $this->call([SeedersPesanSeeder::class]);
     }
 }

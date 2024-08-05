@@ -69,8 +69,6 @@ export default function Edit({ idMakanan, show, onClose }) {
         }
     }, [idMakanan]);
 
-    console.log("dataApi", makanan);
-
     const handleToggleModal = () => {
         setOpenModalEdit(!openModalEdit);
     };
@@ -95,12 +93,10 @@ export default function Edit({ idMakanan, show, onClose }) {
         setPreviewImage(makanan.image_url || null);
     };
 
-    console.log("data", data);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("data", data);
             await MakananSchema.validate(data, { abortEarly: false });
             const formData = new FormData();
             Object.keys(data).forEach((key) => {
@@ -110,7 +106,6 @@ export default function Edit({ idMakanan, show, onClose }) {
                     formData.append(key, data[key]);
                 }
             });
-            console.log("datasubmit", formData);
 
             post(`/makanan/${idMakanan}`, {
                 data: formData,
@@ -123,7 +118,6 @@ export default function Edit({ idMakanan, show, onClose }) {
                 },
             });
         } catch (err) {
-            console.log("err", err);
             if (err.inner) {
                 const newErrors = {};
                 err.inner.forEach((error) => {
@@ -134,7 +128,6 @@ export default function Edit({ idMakanan, show, onClose }) {
         }
     };
 
-    console.log("error", errors);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
