@@ -17,14 +17,17 @@ class KasMasukSeeder extends Seeder
             [
                 'kode' => 'KSP24001',
                 'metode_pembayaran' => 'Tunai',
+                'status' => 'Bayar',
             ],
             [
                 'kode' => 'KSP24002',
                 'metode_pembayaran' => 'Tunai',
+                'status' => 'Bayar',
             ],
             [
                 'kode' => 'KSP24003',
                 'metode_pembayaran' => 'Debit',
+                'status' => 'Bayar',
             ],
         ];
 

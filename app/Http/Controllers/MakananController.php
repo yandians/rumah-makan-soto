@@ -55,10 +55,23 @@ class MakananController extends Controller
     public function store(StoreMakananRequest $request)
     {
         try {
+            $originalFilename = $request->file('image')->getClientOriginalName();
+            $timestamp = now()->timestamp;
+
+            // Replace spaces with underscores
+            $sanitizedFilename = str_replace(' ', '_', $originalFilename);
+            $newFilename = $timestamp . '_' . $sanitizedFilename;
+
+            // Store the file
+            $path = $request->file('image')->storeAs('images', $newFilename, 'public');
+
             $makanan = new Makanan();
             $makanan->nama = $request['nama'];
             $makanan->kategori = $request['kategori'];
             $makanan->harga = $request['harga'];
+            // Store the path relative to the 'storage' folder
+            $makanan->image = 'storage/' . $path;
+            $makanan->deskripsi = $request['deskripsi'];
             $makanan->save();
 
             return redirect()->route('makanan.index')->with('message', sprintf(
@@ -69,6 +82,8 @@ class MakananController extends Controller
             return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
         }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -101,31 +116,69 @@ class MakananController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
     public function update(UpdateMakananRequest $request, Makanan $makanan)
     {
         try {
-            $makanan->nama = $request->nama;
-            $makanan->kategori = $request->kategori;
-            $makanan->harga = $request->harga;
+            // If a new image is uploaded, process it
+            if ($request->hasFile('image')) {
+                // Delete the old image if it exists
+                if ($makanan->image && \Illuminate\Support\Facades\Storage::disk('public')->exists(str_replace('storage/', '', $makanan->image))) {
+                    \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $makanan->image));
+                }
+
+                $originalFilename = $request->file('image')->getClientOriginalName();
+                $timestamp = now()->timestamp;
+
+                // Replace spaces with underscores
+                $sanitizedFilename = str_replace(' ', '_', $originalFilename);
+                $newFilename = $timestamp . '_' . $sanitizedFilename;
+
+                // Store the file
+                $path = $request->file('image')->storeAs('images', $newFilename, 'public');
+
+                // Update the image path
+                $makanan->image = 'storage/' . $path;
+            }
+
+            // Update other fields
+            $makanan->nama = $request['nama'];
+            $makanan->kategori = $request['kategori'];
+            $makanan->harga = $request['harga'];
+            $makanan->deskripsi = $request['deskripsi'];
             $makanan->save();
 
             return redirect()->route('makanan.index')->with('message', sprintf(
-                "Makanan dengan nama %s berhasil diupdate!",
-                $request->nama
+                "Makanan dengan nama %s berhasil diperbarui!",
+                $request['nama']
             ));
         } catch (\Exception $e) {
-            return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat mengupdate data: ' . $e->getMessage()]);
+            return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat memperbarui data: ' . $e->getMessage()]);
         }
     }
+
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Makanan $makanan)
     {
-        $makanan->delete();
-        $namaMakanan = $makanan->nama;
-
-        return redirect()->back()->with('message', sprintf("Makanan dengan nama %s berhasil dihapus!", $namaMakanan));
+        try {
+            // Check if the image exists and delete it
+            if ($makanan->image && \Illuminate\Support\Facades\Storage::disk('public')->exists(str_replace('storage/', '', $makanan->image))) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $makanan->image));
+            }
+    
+            // Delete the makanan record
+            $makanan->delete();
+    
+            return redirect()->route('makanan.index')->with('message', sprintf(
+                "Makanan dengan nama %s berhasil dihapus!",
+                $makanan->nama
+            ));
+        } catch (\Exception $e) {
+            return back()->withErrors(['message' => 'Terjadi kesalahan saat menghapus data: ' . $e->getMessage()]);
+        }
     }
 }

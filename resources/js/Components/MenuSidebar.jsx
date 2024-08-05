@@ -57,7 +57,6 @@ const customTheme = {
 };
 
 export default function MenuSidebar({ user, ...props }) {
-    console.log("user", user);
     const useLocalStorage = (key, initialValue) => {
         const [storedValue, setStoredValue] = useState(() => {
             try {
@@ -121,7 +120,7 @@ export default function MenuSidebar({ user, ...props }) {
                     {user.level === "owner" ? (
                         <>
                             <Link
-                                href="/produk"
+                                href="/makanan"
                                 method="get"
                                 as="button"
                                 type="button"
@@ -129,7 +128,7 @@ export default function MenuSidebar({ user, ...props }) {
                             >
                                 <Sidebar.Item
                                     icon={BiFoodMenu}
-                                    active={route().current("produk.index")}
+                                    active={route().current("makanan.index")}
                                 >
                                     <span className="flex items-center justify-between text-sm 2xl:text-base">
                                         Makanan

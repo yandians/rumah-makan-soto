@@ -94,7 +94,7 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::post('/makanan', [MakananController::class, 'store'])->name('makanan.store');
     Route::get('/makanan/{id}', [MakananController::class, 'show'])->name('makanan.show');;
     Route::get('/makanan/{makanan}/edit', [MakananController::class, 'edit'])->name('makanan.edit');
-    Route::put('/makanan/{makanan}', [MakananController::class, 'update'])->name('makanan.update');
+    Route::post('/makanan/{makanan}', [MakananController::class, 'update'])->name('makanan.update');
     Route::delete('/makanan/{makanan}', [MakananController::class, 'destroy'])->name('makanan.destroy');
     
     Route::get('/laporan/pendapatan', [KasController::class, 'indexLaporanPendapatan'])->name('kasLaporanPendapatan.index');

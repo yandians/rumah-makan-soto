@@ -46,9 +46,6 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
         }
     }, [idKasMasuk]); // Tambahkan idKasMasuk ke dependencies
 
-    console.log("kas_masuk", kasMasuk)
-    console.log("data", data)
-
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [selectedProduk, setSelectedProduk] = useState(null);
     const [jumlah, setJumlah] = useState(1);
@@ -94,7 +91,6 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
     const [validationErrors, setValidationErrors] = useState({});
 
     const handleSubmit = async (e) => {
-        console.log(data)
         e.preventDefault();
         try {
             await KasPendapatanSchema.validate(data, { abortEarly: false });
@@ -114,8 +110,6 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
             }
         }
     };
-
-    console.log(errors)
 
     const optionsProduk = useMemo(() => {
         return makanans
