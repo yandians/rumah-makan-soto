@@ -71,7 +71,6 @@ class PesanSeeder extends Seeder
                 'nama' => $faker->name,
                 'makanan_id' => $faker->numberBetween(1, 5),
                 'jumlah' => $faker->numberBetween(1, 100),
-                'status' => $faker->randomElement(['Pending']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -80,7 +79,6 @@ class PesanSeeder extends Seeder
                 'nama' => 'Joko',
                 'makanan_id' => 1,
                 'jumlah' => 1,
-                'status' => $faker->randomElement(['Completed']),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
