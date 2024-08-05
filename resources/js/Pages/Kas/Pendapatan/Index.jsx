@@ -13,7 +13,7 @@ import {
     Pagination,
     Dropdown,
     Button,
-    Badge 
+    Badge,
 } from "flowbite-react";
 import { HiSearch, HiOutlineDotsHorizontal, HiCheck } from "react-icons/hi";
 import { ToastContainer, toast } from "react-toastify";
@@ -85,7 +85,7 @@ export default function Index({
     const handleEditModalClose = () => {
         setShowEditModal(false);
     };
-    
+
     const [showModal, setShowModal] = useState(false);
 
     const handleClick = (idProduk) => {
@@ -249,7 +249,10 @@ export default function Index({
                                 </form>
                             </div>
                             <div className="ml-4">
-                                <Create makanans={makanans} lastKode={lastKode} />
+                                <Create
+                                    makanans={makanans}
+                                    lastKode={lastKode}
+                                />
                             </div>
                         </div>
 
@@ -258,6 +261,9 @@ export default function Index({
                                 <TableHead>
                                     <TableHeadCell>Tanggal</TableHeadCell>
                                     <TableHeadCell>Kode</TableHeadCell>
+                                    <TableHeadCell>
+                                        Nama Pelanggan
+                                    </TableHeadCell>
                                     <TableHeadCell>Nama Produk</TableHeadCell>
                                     <TableHeadCell>Total</TableHeadCell>
 
@@ -289,35 +295,180 @@ export default function Index({
                                                 <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                                     {kasMasuk.kode}
                                                 </TableCell>
-                                                <TableCell>
-                                                    <ul>
-                                                        {kasMasuk.kas_masuk_makanan.map(
-                                                            (sk) => (
-                                                                <li key={sk.id}>
-                                                                    {"- "}
-                                                                    {
-                                                                        sk
-                                                                            .makanan
-                                                                            .nama
-                                                                    }{" "}
-                                                                    {/* Menampilkan nama produk */}{" "}
-                                                                    (Jumlah:{" "}
-                                                                    {sk.jumlah},
-                                                                    Harga:{" "}
-                                                                    {formatRupiah(
-                                                                        sk
-                                                                            .makanan
-                                                                            .harga
-                                                                    )}
-                                                                    ){" "}
-                                                                </li>
-                                                            )
-                                                        )}
-                                                    </ul>
+                                                <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                                    {kasMasuk.kode.startsWith(
+                                                        "PSN"
+                                                    ) ? (
+                                                        <ul>
+                                                            {kasMasuk.kas_masuk_pesan.map(
+                                                                (sk) => (
+                                                                    <li
+                                                                        key={
+                                                                            sk.id
+                                                                        }
+                                                                    >
+                                                                        {
+                                                                            sk.nama
+                                                                        }
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    ) : (
+                                                        "-"
+                                                    )}
                                                 </TableCell>
                                                 <TableCell>
-                                                <Badge color="gray" className="w-fit">{kasMasuk.metode_pembayaran}</Badge>
-                                                    {formatRupiah(
+                                                    {kasMasuk.kode.startsWith(
+                                                        "PSN"
+                                                    ) ? (
+                                                        <ul>
+                                                            {kasMasuk.kas_masuk_pesan.map(
+                                                                (sk) => (
+                                                                    <li
+                                                                        key={
+                                                                            sk.id
+                                                                        }
+                                                                    >
+                                                                        {"- "}
+                                                                        {
+                                                                            sk
+                                                                                .makanan
+                                                                                .nama
+                                                                        }{" "}
+                                                                        {/* Menampilkan nama produk */}{" "}
+                                                                        (Jumlah:{" "}
+                                                                        {
+                                                                            sk.jumlah
+                                                                        }
+                                                                        , Harga:{" "}
+                                                                        {formatRupiah(
+                                                                            sk
+                                                                                .makanan
+                                                                                .harga
+                                                                        )}
+                                                                        ){" "}
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    ) : (
+                                                        <ul>
+                                                            {kasMasuk.kas_masuk_makanan.map(
+                                                                (sk) => (
+                                                                    <li
+                                                                        key={
+                                                                            sk.id
+                                                                        }
+                                                                    >
+                                                                        {"- "}
+                                                                        {
+                                                                            sk
+                                                                                .makanan
+                                                                                .nama
+                                                                        }{" "}
+                                                                        {/* Menampilkan nama produk */}{" "}
+                                                                        (Jumlah:{" "}
+                                                                        {
+                                                                            sk.jumlah
+                                                                        }
+                                                                        , Harga:{" "}
+                                                                        {formatRupiah(
+                                                                            sk
+                                                                                .makanan
+                                                                                .harga
+                                                                        )}
+                                                                        ){" "}
+                                                                    </li>
+                                                                )
+                                                            )}
+                                                        </ul>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell>
+                                                    {/* <Badge
+                                                        color="gray"
+                                                        className="w-fit"
+                                                    >
+                                                        {
+                                                            kasMasuk.metode_pembayaran
+                                                        }
+                                                    </Badge> */}
+                                                    {kasMasuk.kode.startsWith(
+                                                        "PSN"
+                                                    ) ? (
+                                                        <>
+                                                            <div className="flex">
+                                                                <Badge
+                                                                    color="gray"
+                                                                    className="w-fit mr-2"
+                                                                >
+                                                                    {
+                                                                        kasMasuk.metode_pembayaran
+                                                                    }
+                                                                </Badge>
+                                                                <Badge
+                                                                    color="yellow"
+                                                                    className="w-fit"
+                                                                >
+                                                                    {
+                                                                        kasMasuk.status
+                                                                    }
+                                                                </Badge>
+                                                            </div>
+
+                                                            {formatRupiah(
+                                                                kasMasuk.kas_masuk_pesan.reduce(
+                                                                    (
+                                                                        total,
+                                                                        sk
+                                                                    ) =>
+                                                                        total +
+                                                                        sk.jumlah *
+                                                                            sk
+                                                                                .makanan
+                                                                                .harga,
+                                                                    0
+                                                                )
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <div className="flex">
+                                                                <Badge
+                                                                    color="gray"
+                                                                    className="w-fit mr-2"
+                                                                >
+                                                                    {
+                                                                        kasMasuk.metode_pembayaran
+                                                                    }
+                                                                </Badge>
+                                                                <Badge
+                                                                    color="green"
+                                                                    className="w-fit"
+                                                                >
+                                                                    {
+                                                                        kasMasuk.status
+                                                                    }
+                                                                </Badge>
+                                                            </div>
+                                                            {formatRupiah(
+                                                                kasMasuk.kas_masuk_makanan.reduce(
+                                                                    (
+                                                                        total,
+                                                                        sk
+                                                                    ) =>
+                                                                        total +
+                                                                        sk.jumlah *
+                                                                            sk
+                                                                                .makanan
+                                                                                .harga,
+                                                                    0
+                                                                )
+                                                            )}
+                                                        </>
+                                                    )}
+                                                    {/* {formatRupiah(
                                                         kasMasuk.kas_masuk_makanan.reduce(
                                                             (total, sk) =>
                                                                 total +
@@ -326,7 +477,7 @@ export default function Index({
                                                                         .harga,
                                                             0
                                                         )
-                                                    )}
+                                                    )} */}
                                                 </TableCell>
                                                 <TableCell width={10}>
                                                     <Dropdown
@@ -352,7 +503,7 @@ export default function Index({
                                                         <Dropdown.Item
                                                             onClick={() =>
                                                                 handleEditClick(
-                                                                    kasMasuk.id
+                                                                    kasMasuk.kode
                                                                 )
                                                             }
                                                         >

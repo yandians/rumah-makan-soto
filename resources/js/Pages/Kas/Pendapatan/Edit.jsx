@@ -15,14 +15,24 @@ function formatRupiah(angka) {
     return formatter.format(angka);
 }
 
-export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) {
+export default function Edit({
+    makanans,
+    lastKode,
+    show,
+    onClose,
+    idKasMasuk,
+}) {
     const { data, setData, put, errors, reset } = useForm({
         kode: "",
-        makanans: [], // Pastikan produks diinisialisasi dengan array kosong
+        makanans: [],
+        kas_masuk_pesan: [],
         metode_pembayaran: "",
+        status: "",
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
+    // console.log("idKasMasuk", idKasMasuk)
+    console.log("data", data);
 
     useEffect(() => {
         if (idKasMasuk) {
@@ -32,19 +42,20 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
                     const kasMasukData = response.data;
                     setKasMasuk(kasMasukData);
 
-                    // Update data dengan nilai dari kasMasukData
                     setData({
                         ...data,
                         kode: kasMasukData.kode,
-                        makanans: kasMasukData.kas_masuk_makanan || [], // Pastikan produks tidak undefined
+                        makanans: kasMasukData.kas_masuk_makanan || [],
+                        kas_masuk_pesan: kasMasukData.kas_masuk_pesan || [],
                         metode_pembayaran: kasMasukData.metode_pembayaran,
+                        status: kasMasukData.status,
                     });
                 })
                 .catch((error) => {
                     console.error("Error fetching produk:", error);
                 });
         }
-    }, [idKasMasuk]); // Tambahkan idKasMasuk ke dependencies
+    }, [idKasMasuk]);
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [selectedProduk, setSelectedProduk] = useState(null);
@@ -124,13 +135,22 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
     }, [makanans, data.makanans]);
 
     const totalPembayaran = useMemo(() => {
-        return data.makanans.reduce((total, makanan) => {
-            const hargaProduk = makanan.harga
-                ? makanan.harga
-                : makanan.makanan.harga * makanan.jumlah;
-            return total + hargaProduk;
-        }, 0);
-    }, [data.makanans]);
+        if (data.makanans.length > 1) {
+            return data.makanans.reduce((total, makanan) => {
+                const hargaProduk = makanan.harga
+                    ? makanan.harga
+                    : makanan.makanan.harga * makanan.jumlah;
+                return total + hargaProduk;
+            }, 0);
+        } else {
+            return data.kas_masuk_pesan.reduce((total, makanan) => {
+                const hargaProduk = makanan.harga
+                    ? makanan.harga
+                    : makanan.makanan.harga * makanan.jumlah;
+                return total + hargaProduk;
+            }, 0);
+        }
+    }, [data.makanans, data.kas_masuk_pesan]);
 
     return (
         <>
@@ -269,7 +289,8 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
                                                 {formatRupiah(
                                                     makanan.harga
                                                         ? makanan.harga
-                                                        : makanan.makanan.harga *
+                                                        : makanan.makanan
+                                                              .harga *
                                                               makanan.jumlah
                                                 )}
                                             </td>
@@ -288,6 +309,51 @@ export default function Edit({ makanans, lastKode, show, onClose, idKasMasuk }) 
                                             </td>
                                         </tr>
                                     ))}
+                                    {data.makanans.length < 1 &&
+                                        data.kas_masuk_pesan.map(
+                                            (makanan, index) => (
+                                                <tr key={index}>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {makanan.makanan.nama}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {formatRupiah(
+                                                            makanan.harga
+                                                                ? makanan.harga
+                                                                : makanan
+                                                                      .makanan
+                                                                      .harga
+                                                        )}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {makanan.jumlah}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        {formatRupiah(
+                                                            makanan.harga
+                                                                ? makanan.harga
+                                                                : makanan
+                                                                      .makanan
+                                                                      .harga *
+                                                                      makanan.jumlah
+                                                        )}
+                                                    </td>
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                        <Button
+                                                            onClick={() =>
+                                                                handleRemoveProduk(
+                                                                    index
+                                                                )
+                                                            }
+                                                            color="red"
+                                                            size="sm"
+                                                        >
+                                                            Hapus
+                                                        </Button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        )}
                                 </tbody>
                                 <tfoot>
                                     <tr>
