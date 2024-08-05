@@ -47,9 +47,16 @@ export default function Dashboard({
     const userLevel = auth.user.level;
     const periodsToShow = userLevel === "owner" ? ["today", "thisWeek", "thisMonth"] : ["today"];
 
-    const handleCardClick = (period) => {
-        Inertia.get(route("kasLaporanBukuBesar.index"), { period });
+    const handleCardClick = (period, type) => {
+        if (type === 'labaRugi') {
+            Inertia.get(route("kasLaporanBukuBesar.index"), { period });
+        } else if (type === 'pemasukan') {
+            Inertia.get(route("kasLaporanPendapatan.index"), { period });
+        } else if (type === 'pengeluaran') {
+            Inertia.get(route("kasLaporanPengeluaran.index"), { period });
+        }
     };
+
 
     return (
         <AuthenticatedLayout
@@ -74,7 +81,7 @@ export default function Dashboard({
                                             {period.label}
                                         </h3>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            <Card onClick={() => handleCardClick(periodKey)} className="cursor-pointer">
+                                            <Card onClick={() => handleCardClick(periodKey, 'labaRugi')} className="cursor-pointer">
                                                 <div className="flex items-center">
                                                     <RiMoneyDollarCircleLine className="text-4xl mr-4 text-gray-600" />
                                                     <div>
@@ -87,7 +94,7 @@ export default function Dashboard({
                                                     </div>
                                                 </div>
                                             </Card>
-                                            <Card className="mt-4 sm:mt-0">
+                                            <Card onClick={() => handleCardClick(periodKey, 'pemasukan')} className="cursor-pointer mt-4 sm:mt-0">
                                                 <div className="flex items-center">
                                                     <GiReceiveMoney className="text-4xl mr-4 text-gray-600" />
                                                     <div>
@@ -100,7 +107,7 @@ export default function Dashboard({
                                                     </div>
                                                 </div>
                                             </Card>
-                                            <Card className="mt-4 sm:mt-0">
+                                            <Card onClick={() => handleCardClick(periodKey, 'pengeluaran')} className="cursor-pointer mt-4 sm:mt-0">
                                                 <div className="flex items-center">
                                                     <GiPayMoney className="text-4xl mr-4 text-gray-600" />
                                                     <div>

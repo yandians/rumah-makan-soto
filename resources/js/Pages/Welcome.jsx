@@ -1,4 +1,5 @@
-import { Link, Head } from "@inertiajs/react";
+import { useState } from "react";
+import { Link } from "@inertiajs/react";
 import { Button, Navbar, Card } from "flowbite-react";
 import logo from "../Assets/Logo Full Rumah Makan Soto.png";
 import img_soto from "../Assets/soto.png";
@@ -9,7 +10,18 @@ import img_soto_malang from "../Assets/soto_malang.png";
 import img_soto_makasar from "../Assets/soto_makasar.png";
 import img_soto_padang from "../Assets/soto_padang.png";
 
+const menuItems = [
+    { id: 1, name: "Soto Jogja", image: img_soto_jogja },
+    { id: 2, name: "Soto Betawi", image: img_soto_betawi },
+    { id: 3, name: "Soto Banjar", image: img_soto_banjar },
+    { id: 4, name: "Soto Malang", image: img_soto_malang },
+    { id: 5, name: "Soto Makasar", image: img_soto_makasar },
+    { id: 6, name: "Soto Padang", image: img_soto_padang },
+];
+
 export default function Welcome({ auth, laravelVersion, phpVersion }) {
+    const [menuToShow, setMenuToShow] = useState(menuItems.slice(0, 4));
+
     return (
         <>
             <Navbar fluid rounded>
@@ -21,9 +33,15 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     />
                 </Navbar.Brand>
                 <div className="flex md:order-2">
-                    <a href="/login">
-                        <Button>Login</Button>
-                    </a>
+                    {!auth.user ? (
+                        <a href="/login">
+                            <Button>Login</Button>
+                        </a>
+                    ) : (
+                        <span className="text-black text-lg font-semibold text-opacity-80">
+                            Hallo, {auth.user.name}!
+                        </span>
+                    )}
                 </div>
             </Navbar>
 
@@ -55,78 +73,25 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                         Menu
                     </h3>
                     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mx-10">
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_jogja}
-                                    alt="Soto Jogja"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Jogja
-                                </h5>
-                            </div>
-                        </Card>
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_betawi}
-                                    alt="Soto Betawi"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Betawi
-                                </h5>
-                            </div>
-                        </Card>
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_banjar}
-                                    alt="Soto Banjar"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Banjar
-                                </h5>
-                            </div>
-                        </Card>
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_malang}
-                                    alt="Soto Malang"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Malang
-                                </h5>
-                            </div>
-                        </Card>
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_makasar}
-                                    alt="Soto Makasar"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Makasar
-                                </h5>
-                            </div>
-                        </Card>
-                        <Card className="">
-                            <div className="flex flex-col items-center">
-                                <img
-                                    src={img_soto_padang}
-                                    alt="Soto Padang"
-                                    className="w-fit h-32 object-cover mb-4"
-                                />
-                                <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-center">
-                                    Soto Padang
-                                </h5>
-                            </div>
-                        </Card>
+                        {menuToShow.map((menu) => (
+                            <Card key={menu.id} className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                                <div className="flex flex-col items-center">
+                                    <img
+                                        src={menu.image}
+                                        alt={menu.name}
+                                        className="w-full h-48 object-cover mb-4 rounded-t-lg"
+                                    />
+                                    <h5 className="text-xl font-bold tracking-tight text-gray-900 text-center">
+                                        {menu.name}
+                                    </h5>
+                                </div>
+                            </Card>
+                        ))}
+                    </div>
+                    <div className="flex justify-center mt-6">
+                        <Link href="/daftar-menu">
+                            <Button>All Menu</Button>
+                        </Link>
                     </div>
                 </div>
             </section>

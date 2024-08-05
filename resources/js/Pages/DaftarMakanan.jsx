@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Navbar, Card, Modal } from "flowbite-react";
+import { Button, Navbar, Card, Modal, Spinner } from "flowbite-react";
 import { HiCheckCircle } from "react-icons/hi";
 import logo from "../Assets/Logo Full Rumah Makan Soto.png";
 import { HiUser, HiShoppingBag } from "react-icons/hi";
@@ -40,7 +40,8 @@ export default function DaftarMakanan({ makanans, auth }) {
     const [showOrders, setShowOrders] = useState(false);
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
-    console.log(makanans)
+    const [isLoading, setIsLoading] = useState(false);
+    console.log(makanans);
 
     const handleShoppingBagClick = () => {
         setShowOrders(!showOrders);
@@ -51,10 +52,15 @@ export default function DaftarMakanan({ makanans, auth }) {
     };
 
     const handleOrder = () => {
+        setIsLoading(true);
         setShowModal(true);
         setTimeout(() => {
-            setShowModal(false);
-        }, 5000);
+            setIsLoading(false);
+            setTimeout(() => {
+                setShowModal(false);
+                setOrders([]); // Mengubah data pesanan menjadi null setelah menekan "pesan sekarang"
+            }, 3000);
+        }, 2000);
     };
 
     const userRole = auth.user ? auth.user.level : null;
@@ -110,6 +116,9 @@ export default function DaftarMakanan({ makanans, auth }) {
                                     <h5 className="text-xl font-bold tracking-tight text-gray-900 text-center">
                                         {makanan.nama}
                                     </h5>
+                                    <p className="text-base text-gray-600 mt-2 text-center">
+                                        {makanan.deskripsi}
+                                    </p>
                                     <p className="text-lg font-semibold text-gray-700 mt-2">
                                         Rp {makanan.harga}
                                     </p>
@@ -128,15 +137,22 @@ export default function DaftarMakanan({ makanans, auth }) {
             {/* Order Modal */}
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <Modal.Header className="bg-green-500 text-white">
-                    Pesanan Berhasil
+                    Setatus Pesanan
                 </Modal.Header>
                 <Modal.Body className="text-center">
-                    <div className="flex flex-col items-center justify-center py-4">
-                        <HiCheckCircle className="h-12 w-12 text-green-500 mb-4" />
-                        <p className="text-lg font-semibold">
-                            Silahkan tunggu pesanan anda
-                        </p>
-                    </div>
+                    {isLoading ? (
+                        <div className="flex flex-col items-center justify-center py-4">
+                            <Spinner aria-label="Loading" size="xl" className="mb-4" />
+                            <p className="text-lg font-semibold">Memproses pesanan...</p>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col items-center justify-center py-4">
+                            <HiCheckCircle className="h-12 w-12 text-green-500 mb-4" />
+                            <p className="text-lg font-semibold">
+                                Silahkan tunggu pesanan anda
+                            </p>
+                        </div>
+                    )}
                 </Modal.Body>
             </Modal>
         </>
