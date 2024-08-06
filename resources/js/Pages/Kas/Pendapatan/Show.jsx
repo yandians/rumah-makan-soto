@@ -15,7 +15,7 @@ export default function Show({ show, onClose, idKasMasuk }) {
     const { data, setData, put, errors, reset } = useForm({
         kode: "",
         makanans: [], // Pastikan produks diinisialisasi dengan array kosong
-        metode_pembayaran: "",
+        status: "",
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
@@ -33,7 +33,7 @@ export default function Show({ show, onClose, idKasMasuk }) {
                         ...data,
                         kode: kasMasukData.kode,
                         makanans: kasMasukData.kas_masuk_makanan || [], // Pastikan produks tidak undefined
-                        metode_pembayaran: kasMasukData.metode_pembayaran,
+                        status: kasMasukData.status,
                     });
                 })
                 .catch((error) => {
@@ -41,6 +41,7 @@ export default function Show({ show, onClose, idKasMasuk }) {
                 });
         }
     }, [idKasMasuk]); // Tambahkan idKasMasuk ke dependencies
+
     
     const componentRef = useRef();
     const handlePrint = useReactToPrint({

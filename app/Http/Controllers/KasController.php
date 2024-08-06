@@ -253,7 +253,7 @@ class KasController extends Controller
     {
         try {
             DB::beginTransaction();
-            $metode_pembayaran = $request->input('metode_pembayaran');
+            $status = $request->input('status');
 
             $kas = Kas::create([
                 'kode' => $request->kode,
@@ -261,7 +261,7 @@ class KasController extends Controller
 
             $kasMasuk = KasMasuk::create([
                 'kode' => $request->kode,
-                'metode_pembayaran' => $metode_pembayaran,
+                'status' => $status,
             ]);
 
             $errors = [];
@@ -340,7 +340,7 @@ class KasController extends Controller
     {
 
         $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan', 'kasMasukPesan.makanan')
-            ->where('kode', 'like', $id)
+            ->where('id', 'like', $id)
             ->first();
 
         // dd($kasMasuk);
@@ -369,13 +369,13 @@ class KasController extends Controller
     {
         try {
             DB::beginTransaction();
-            $metode_pembayaran = $request->input('metode_pembayaran');
+            $status = $request->input('status');
 
             KasMasuk::where('kode', $request->kode)->delete();
 
             $kasMasuk = KasMasuk::create([
                 'kode' => $request->kode,
-                'metode_pembayaran' => $metode_pembayaran,
+                'status' => $status,
             ]);
 
             KasMasukMakanan::where('kode', $request->kode)->delete();

@@ -58,7 +58,6 @@ export default function Index({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            console.log("data", data)
             await put(`/pesan/`, {
                 data: data,
                 onSuccess: () => {
@@ -78,7 +77,6 @@ export default function Index({
         }
     };
 
-    console.log("error", errors)
 
     const toggleEdit = (index, event) => {
         if (editIndex === index) {
@@ -105,11 +103,11 @@ export default function Index({
         >
             <ToastContainer />
 
-            <div className="py-6">
+            <div className="pt-6">
                 <div className="mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="px-10 pt-10 pb-5 2xl:pb-10 text-gray-900 text-[28px] 2xl:text-4xl font-medium">
-                            <FaShoppingCart className="inline mr-2" />
+                            {/* <FaShoppingCart className="inline mr-2" /> */}
                             DAFTAR PESANAN
                         </div>
                     </div>

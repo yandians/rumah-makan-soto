@@ -13,7 +13,6 @@ import {
     Pagination,
     Dropdown,
     Button,
-    Badge,
 } from "flowbite-react";
 import { HiSearch, HiOutlineDotsHorizontal, HiCheck } from "react-icons/hi";
 import { ToastContainer, toast } from "react-toastify";
@@ -180,6 +179,20 @@ export default function Index({
         Inertia.get(route("kasPendapatan.index"), filterParams);
     };
 
+    const statusColor = {
+        "Menunggu Pembayaran": "bg-red-600",
+        "Sudah Dibayar": "bg-blue-500",
+        "Sedang Diproses": "bg-yellow-600",
+        "Selesai": "bg-green-500",
+    };
+
+    const statusLabel = {
+        "Menunggu Pembayaran" : "Menunggu Pembayaran",
+        "Sudah Dibayar": "Sudah Dibayar",
+        "Sedang Diproses": "Sedang Diproses",
+        "Selesai": "Selesai",
+    };
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -261,11 +274,9 @@ export default function Index({
                                 <TableHead>
                                     <TableHeadCell>Tanggal</TableHeadCell>
                                     <TableHeadCell>Kode</TableHeadCell>
-                                    <TableHeadCell>
-                                        Nama Pelanggan
-                                    </TableHeadCell>
                                     <TableHeadCell>Nama Produk</TableHeadCell>
                                     <TableHeadCell>Total</TableHeadCell>
+                                    <TableHeadCell>Status</TableHeadCell>
 
                                     <TableHeadCell>
                                         <span className="sr-only">Edit</span>
@@ -292,32 +303,11 @@ export default function Index({
                                                         .locale("id")
                                                         .format("D MMM YYYY")}
                                                 </TableCell>
+
                                                 <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                                     {kasMasuk.kode}
                                                 </TableCell>
-                                                <TableCell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                                    {kasMasuk.kode.startsWith(
-                                                        "PSN"
-                                                    ) ? (
-                                                        <ul>
-                                                            {kasMasuk.kas_masuk_pesan.map(
-                                                                (sk) => (
-                                                                    <li
-                                                                        key={
-                                                                            sk.id
-                                                                        }
-                                                                    >
-                                                                        {
-                                                                            sk.nama
-                                                                        }
-                                                                    </li>
-                                                                )
-                                                            )}
-                                                        </ul>
-                                                    ) : (
-                                                        "-"
-                                                    )}
-                                                </TableCell>
+
                                                 <TableCell>
                                                     {kasMasuk.kode.startsWith(
                                                         "PSN"
@@ -368,11 +358,11 @@ export default function Index({
                                                                                 .nama
                                                                         }{" "}
                                                                         {/* Menampilkan nama produk */}{" "}
-                                                                        (Jumlah:{" "}
+                                                                        (
                                                                         {
                                                                             sk.jumlah
                                                                         }
-                                                                        , Harga:{" "}
+                                                                        * ,{" "}
                                                                         {formatRupiah(
                                                                             sk
                                                                                 .makanan
@@ -385,6 +375,7 @@ export default function Index({
                                                         </ul>
                                                     )}
                                                 </TableCell>
+
                                                 <TableCell>
                                                     {kasMasuk.kode.startsWith(
                                                         "PSN"
@@ -407,24 +398,6 @@ export default function Index({
                                                         </>
                                                     ) : (
                                                         <>
-                                                            <div className="flex">
-                                                                <Badge
-                                                                    color="gray"
-                                                                    className="w-fit mr-2"
-                                                                >
-                                                                    {
-                                                                        kasMasuk.metode_pembayaran
-                                                                    }
-                                                                </Badge>
-                                                                <Badge
-                                                                    color="green"
-                                                                    className="w-fit"
-                                                                >
-                                                                    {
-                                                                        kasMasuk.status
-                                                                    }
-                                                                </Badge>
-                                                            </div>
                                                             {formatRupiah(
                                                                 kasMasuk.kas_masuk_makanan.reduce(
                                                                     (
@@ -452,6 +425,15 @@ export default function Index({
                                                         )
                                                     )} */}
                                                 </TableCell>
+
+                                                <TableCell>
+                                                    <span
+                                                        className={`w-full text-nowrap ml-2 ${statusColor[kasMasuk.status] || "bg-gray-500"} text-white px-2 py-1 rounded`}
+                                                    >
+                                                        {statusLabel[kasMasuk.status] || "Unknown Status"}
+                                                    </span>
+                                                </TableCell>
+
                                                 <TableCell width={10}>
                                                     <Dropdown
                                                         label=""

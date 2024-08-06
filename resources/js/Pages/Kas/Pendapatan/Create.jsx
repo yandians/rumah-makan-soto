@@ -6,7 +6,7 @@ import Select from "react-select";
 import KasPendapatanSchema from "./KasPendapatanSchema";
 
 function formatRupiah(angka) {
-    var formatter = new Intl.NumberFormat("id-ID", {
+    const formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         minimumFractionDigits: 0,
@@ -20,33 +20,27 @@ export default function Create({ makanans, lastKode }) {
         let incrementedDigits = (parseInt(lastThreeDigits) + 1)
             .toString()
             .padStart(3, "0");
-        let newStr = str.slice(0, -3) + incrementedDigits;
-        return newStr;
+        return str.slice(0, -3) + incrementedDigits;
     };
-    let originalString = lastKode;
-    let modifiedString = modifyString(originalString);
+
+    const modifiedString = modifyString(lastKode);
 
     const { data, setData, post, errors, reset } = useForm({
         kode: modifiedString,
         makanans: [],
         metode_pembayaran: "",
+        status: "", // Add status to the form data
     });
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
     const [selectedProduk, setSelectedProduk] = useState(null);
     const [jumlah, setJumlah] = useState(1);
+    const [validationErrors, setValidationErrors] = useState({});
+    const [selectedStatus, setSelectedStatus] = useState(""); // Add state for selectedStatus
 
-    const handleToggleModal = () => {
-        setOpenModalCreate(!openModalCreate);
-    };
+    const handleToggleModal = () => setOpenModalCreate(!openModalCreate);
 
-    const parseRupiah = (value) => {
-        return parseInt(value.replace(/[^0-9]/g, ""), 10) || 0;
-    };
-
-    const handleSelectProduk = (selectedOption) => {
-        setSelectedProduk(selectedOption);
-    };
+    const handleSelectProduk = (selectedOption) => setSelectedProduk(selectedOption);
 
     const handleAddProduk = () => {
         if (selectedProduk) {
@@ -54,7 +48,7 @@ export default function Create({ makanans, lastKode }) {
                 makanan_id: selectedProduk.value,
                 nama: selectedProduk.label,
                 harga: selectedProduk.harga,
-                jumlah: jumlah,
+                jumlah,
             };
             setData({ ...data, makanans: [...data.makanans, newProduk] });
             setSelectedProduk(null);
@@ -72,9 +66,8 @@ export default function Create({ makanans, lastKode }) {
         reset();
         setSelectedProduk(null);
         setJumlah(1);
+        setSelectedStatus(""); // Reset selected status
     };
-
-    const [validationErrors, setValidationErrors] = useState({});
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -87,6 +80,7 @@ export default function Create({ makanans, lastKode }) {
                 },
             });
         } catch (err) {
+            console.log("err", err)
             if (err.inner) {
                 const newErrors = {};
                 err.inner.forEach((error) => {
@@ -96,6 +90,8 @@ export default function Create({ makanans, lastKode }) {
             }
         }
     };
+    console.log("error", errors)
+
 
     const optionsProduk = useMemo(() => {
         return makanans
@@ -115,6 +111,25 @@ export default function Create({ makanans, lastKode }) {
         }, 0);
     }, [data.makanans]);
 
+    const statusColor = {
+        "Menunggu Pembayaran": "bg-red-600",
+        "Sudah Dibayar": "bg-blue-500",
+        "Sedang Diproses": "bg-yellow-600",
+        "Selesai": "bg-green-500",
+    };
+
+    const statusLabel = {
+        "Menunggu Pembayaran": "Menunggu Pembayaran",
+        "Sudah Dibayar": "Sudah Dibayar",
+        "Sedang Diproses": "Sedang Diproses",
+        "Selesai": "Selesai",
+    };
+
+    const handleChange = (event) => {
+        const status = event.target.value;
+        setSelectedStatus(status);
+        setData({ ...data, status }); // Update form data
+    };
 
     return (
         <>
@@ -190,17 +205,14 @@ export default function Create({ makanans, lastKode }) {
                                                     value={jumlah}
                                                     onChange={(e) =>
                                                         setJumlah(
-                                                            parseInt(
-                                                                e.target.value,
-                                                                10
-                                                            )
+                                                            parseInt(e.target.value, 10) || 1
                                                         )
                                                     }
                                                     className="w-24 rounded-md"
                                                 />
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {formatRupiah(selectedProduk.harga * jumlah)}
+                                                {formatRupiah(selectedProduk.harga * jumlah)}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <Button
@@ -255,11 +267,7 @@ export default function Create({ makanans, lastKode }) {
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 <Button
-                                                    onClick={() =>
-                                                        handleRemoveProduk(
-                                                            index
-                                                        )
-                                                    }
+                                                    onClick={() => handleRemoveProduk(index)}
                                                     color="red"
                                                     size="sm"
                                                 >
@@ -278,7 +286,7 @@ export default function Create({ makanans, lastKode }) {
                                             Total Pembayaran
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                           {formatRupiah(totalPembayaran)}
+                                            {formatRupiah(totalPembayaran)}
                                         </td>
                                         <td></td>
                                     </tr>
@@ -286,60 +294,32 @@ export default function Create({ makanans, lastKode }) {
                             </table>
                         </div>
 
-                        <div className="mt-4">
-                            <Label
-                                htmlFor="metode_pembayaran"
-                                value="Metode Pembayaran"
-                            />
-                            <div className="flex space-x-4">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Tunai"
-                                        name="metode_pembayaran"
-                                        value="Tunai"
-                                        checked={
-                                            data.metode_pembayaran === "Tunai"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Tunai" className="ml-2">
-                                        Tunai
-                                    </label>
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Debit"
-                                        name="metode_pembayaran"
-                                        value="Debit"
-                                        checked={
-                                            data.metode_pembayaran === "Debit"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Debit" className="ml-2">
-                                        Debit
-                                    </label>
-                                </div>
-                            </div>
-                            {(validationErrors.metode_pembayaran ||
-                                errors.metode_pembayaran) && (
+                        <div className="relative">
+                            <Label htmlFor="status" value="Pilih Status" />
+                            <select
+                                id="status"
+                                value={selectedStatus}
+                                onChange={handleChange}
+                                className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                            >
+                                <option value="" disabled>
+                                    Pilih Status
+                                </option>
+                                {Object.keys(statusLabel).map((status) => (
+                                    <option
+                                        key={status}
+                                        value={status}
+                                        style={{
+                                            backgroundColor: statusColor[status],
+                                        }}
+                                    >
+                                        {statusLabel[status]}
+                                    </option>
+                                ))}
+                            </select>
+                            {(validationErrors.status || errors.status) && (
                                 <div className="text-red-500 text-xs italic">
-                                    {validationErrors.metode_pembayaran ||
-                                        errors.metode_pembayaran}
+                                    {validationErrors.status || errors.status}
                                 </div>
                             )}
                         </div>

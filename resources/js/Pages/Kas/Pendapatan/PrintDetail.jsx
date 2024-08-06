@@ -29,7 +29,7 @@ const PrintDetail = React.forwardRef(({ data }, ref) => {
                                 <tr>
                                     <td className="px-4 py-2">Kode</td>
                                     <td className="px-4 py-2">:</td>
-                                    <td className="px-4 py-2">PSP24001</td>
+                                    <td className="px-4 py-2">{data.kode}</td>
                                 </tr>
                                 <tr>
                                     <td className="px-4 py-2">Tanggal</td>
@@ -41,10 +41,10 @@ const PrintDetail = React.forwardRef(({ data }, ref) => {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className="px-4 py-2">Metode</td>
+                                    <td className="px-4 py-2">Status</td>
                                     <td className="px-4 py-2">:</td>
                                     <td className="px-4 py-2">
-                                        {data.metode_pembayaran}
+                                        {data.status}
                                     </td>
                                 </tr>
                                 
