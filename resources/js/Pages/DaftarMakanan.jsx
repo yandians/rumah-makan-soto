@@ -6,9 +6,8 @@ import { HiUser, HiShoppingBag } from "react-icons/hi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "@inertiajs/inertia-react";
-import { usePage } from '@inertiajs/react'
+import { usePage, Head } from "@inertiajs/react";
 import { Inertia } from "@inertiajs/inertia";
-
 
 const Pesanan = ({ orders, onOrder }) => {
     const totalHarga = orders.reduce(
@@ -83,9 +82,8 @@ const FlashMessageModal = () => {
     );
 };
 
-
 export default function DaftarMakanan({ makanans, auth }) {
-    const { flash } = usePage().props
+    const { flash } = usePage().props;
     const [showOrders, setShowOrders] = useState(false);
     const [orders, setOrders] = useState([]);
     const [showModal, setShowModal] = useState(false);
@@ -136,15 +134,18 @@ export default function DaftarMakanan({ makanans, auth }) {
         }
     }, [submitTrigger]);
 
-    const namaPembeli = auth.user.name
+    const namaPembeli = auth.user.name;
 
     const handleOrder = (e) => {
         e.preventDefault();
-        setData("pesan", orders.map((order) => ({
-            produk_id: order.id,
-            nama: namaPembeli,
-            jumlah: order.jumlah,
-        })));
+        setData(
+            "pesan",
+            orders.map((order) => ({
+                produk_id: order.id,
+                nama: namaPembeli,
+                jumlah: order.jumlah,
+            }))
+        );
         setSubmitTrigger(true);
     };
 
@@ -182,6 +183,8 @@ export default function DaftarMakanan({ makanans, auth }) {
 
     return (
         <>
+            <Head title="Daftar Menu" />
+
             <Navbar
                 fluid
                 rounded
@@ -309,7 +312,7 @@ export default function DaftarMakanan({ makanans, auth }) {
                                                                         1) - 1
                                                                 )
                                                             }
-                                                            className="mr-2"
+                                                            className="mr-2 focus:z-1"
                                                         >
                                                             -
                                                         </Button>
@@ -324,7 +327,7 @@ export default function DaftarMakanan({ makanans, auth }) {
                                                                         1) + 1
                                                                 )
                                                             }
-                                                            className="ml-2"
+                                                            className="focus:z-1 ml-2"
                                                         >
                                                             +
                                                         </Button>
@@ -358,13 +361,21 @@ export default function DaftarMakanan({ makanans, auth }) {
                 <Modal.Body className="text-center">
                     {processing ? (
                         <div className="flex flex-col items-center justify-center py-4">
-                            <Spinner aria-label="Loading" size="xl" className="mb-4" />
-                            <p className="text-lg font-semibold">Memproses pesanan...</p>
+                            <Spinner
+                                aria-label="Loading"
+                                size="xl"
+                                className="mb-4"
+                            />
+                            <p className="text-lg font-semibold">
+                                Memproses pesanan...
+                            </p>
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center py-4">
                             <HiCheckCircle className="h-12 w-12 text-green-500 mb-4" />
-                            <p className="text-lg font-semibold">{modalMessage}</p>
+                            <p className="text-lg font-semibold">
+                                {modalMessage}
+                            </p>
                         </div>
                     )}
                 </Modal.Body>
