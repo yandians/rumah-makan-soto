@@ -7,6 +7,7 @@ use App\Http\Requests\StorePesanRequest;
 use App\Http\Requests\UpdatePesanRequest;
 use App\Models\Kas;
 use App\Models\KasMasuk;
+use App\Models\Makanan;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -22,6 +23,14 @@ class PesanController extends Controller
         return Inertia::render('Pesan/Index', []);
     }
 
+    public function indexTest()
+    {
+        $makanans = Makanan::all();
+        return Inertia::render('Pesan/IndexTest', [
+            'makanans' => $makanans
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -32,41 +41,85 @@ class PesanController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePesanRequest $request)
+    // public function store(StorePesanRequest $request)
+    // {
+    //     try {
+    //         dd($request);
+    //         DB::beginTransaction();
+    //         $lastKodePesan = Pesan::where('kode', 'like', 'PSN%')->orderBy('kode', 'desc')->first();
+    //         $lastKode = $lastKodePesan ? $lastKodePesan->kode : "PSN000";
+    //         $lastNumber = (int)substr($lastKode, 3);
+    //         $newNumber = $lastNumber + 1;
+    //         $newKode = 'PSN' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+    //         $kas = Kas::create([
+    //             'kode' => $newKode,
+    //         ]);
+
+    //         $kasMasuk = KasMasuk::create([
+    //             'kode' => $newKode,
+    //             'status' => 'pending'
+    //         ]);
+
+    //         foreach ($request->pesan as $item) {    
+    //                             $pesan = new Pesan();
+    //             $pesan->kode = $newKode;
+    //             $pesan->nama = $item['nama'];
+    //             $pesan->makanan_id = $item['produk_id'];
+    //             $pesan->jumlah = $item['jumlah'];
+    //             $pesan->save();
+    //         }
+
+    //         DB::commit();
+
+    //     } catch (\Exception $e) {
+    //         DB::rollback();
+    //         return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+    //     }
+    // }
+
+    public function storeTest(StorePesanRequest $request)
     {
-        try {
-            DB::beginTransaction();
-            $lastKodePesan = Pesan::where('kode', 'like', 'PSN%')->orderBy('kode', 'desc')->first();
-            $lastKode = $lastKodePesan ? $lastKodePesan->kode : "PSN000";
-            $lastNumber = (int)substr($lastKode, 3);
-            $newNumber = $lastNumber + 1;
-            $newKode = 'PSN' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
-            $kas = Kas::create([
-                'kode' => $newKode,
-            ]);
-
-            $kasMasuk = KasMasuk::create([
-                'kode' => $newKode,
-                'status' => 'pending'
-            ]);
-
-            foreach ($request->pesan as $item) {    
-                                $pesan = new Pesan();
-                $pesan->kode = $newKode;
-                $pesan->nama = $item['nama'];
-                $pesan->makanan_id = $item['produk_id'];
-                $pesan->jumlah = $item['jumlah'];
-                $pesan->save();
-            }
-
-            DB::commit();
-
-        } catch (\Exception $e) {
-            DB::rollback();
-            return back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
-        }
+        dd($request);
     }
+
+    public function store(StorePesanRequest $request)
+{
+    try {
+        DB::beginTransaction();
+
+        // Generate the new kode
+        $lastKodePesan = Pesan::where('kode', 'like', 'PSN%')->orderBy('kode', 'desc')->first();
+        $lastKode = $lastKodePesan ? $lastKodePesan->kode : "PSN000";
+        $lastNumber = (int)substr($lastKode, 3);
+        $newNumber = $lastNumber + 1;
+        $newKode = 'PSN' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
+
+        // Create new kas and kas_masuk records
+        $kas = Kas::create(['kode' => $newKode]);
+        $kasMasuk = KasMasuk::create(['kode' => $newKode, 'status' => 'pending']);
+
+        // Save pesan records
+        foreach ($request->pesan as $item) {
+            $pesan = new Pesan();
+            $pesan->kode = $newKode;
+            $pesan->nama = $item['nama'];
+            $pesan->makanan_id = $item['produk_id']; // Use produk_id instead of id
+            $pesan->jumlah = $item['jumlah'];
+            $pesan->save();
+        }
+
+        DB::commit();
+
+        return redirect()->back()->with('message', 'Pesanan Anda berhasil disimpan. Silahkan bayar ke kasir dengan kode invoice: ' . $newKode);
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->withInput()->withErrors(['message' => 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage()]);
+    }
+}
+
+
+
 
     /**
      * Display the specified resource.
@@ -92,34 +145,34 @@ class PesanController extends Controller
         // dd("hallo");
         // try {
         //     DB::beginTransaction();
-            
+
         //     // Temukan Kas yang sesuai dengan kode yang diberikan
         //     $kas = Kas::where('kode', $kode)->first();
-    
+
         //     if (!$kas) {
         //         return back()->withErrors(['message' => 'Data Kas tidak ditemukan untuk kode ' . $kode]);
         //     }
-    
+
         //     // Perbarui data Kas dengan data baru dari request
         //     $kas->update([
         //         'kode' => $request->input('kode', $kas->kode), // Hanya mengupdate jika ada data baru
         //     ]);
-    
+
         //     // Temukan KasMasuk yang sesuai dengan kode Kas
         //     $kasMasuk = KasMasuk::where('kode', $kode)->first();
-    
+
         //     if (!$kasMasuk) {
         //         return back()->withErrors(['message' => 'Data KasMasuk tidak ditemukan untuk kode ' . $kode]);
         //     }
-    
+
         //     // Perbarui status jika ada data status baru
         //     $kasMasuk->update([
         //         'status' => $request->input('status', $kasMasuk->status), // Hanya mengupdate jika ada data baru
         //     ]);
-    
+
         //     // Hapus semua pesan yang ada untuk kode tersebut sebelum menambahkan yang baru
         //     Pesan::where('kode', $kode)->delete();
-    
+
         //     // Tambahkan pesan baru dari request
         //     foreach ($request->input('pesan', []) as $item) {
         //         $pesan = new Pesan();
@@ -129,9 +182,9 @@ class PesanController extends Controller
         //         $pesan->jumlah = $item['jumlah'];
         //         $pesan->save();
         //     }
-    
+
         //     DB::commit();
-    
+
         //     return redirect()->route('kas.index')->with('success', 'Data berhasil diperbarui.');
         // } catch (\Exception $e) {
         //     DB::rollback();
@@ -146,7 +199,7 @@ class PesanController extends Controller
     {
         try {
             DB::beginTransaction();
-            
+
             Kas::where('kode', $kode)->delete();
             KasMasuk::where('kode', $kode)->delete();
             Pesan::where('kode', $kode)->delete();

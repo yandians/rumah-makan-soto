@@ -38,7 +38,6 @@ export default function Register() {
         e.preventDefault();
         try {
             await registerSchema.validate(data, { abortEarly: false })
-            console.log(data)
             post(route('register'));
             setValidationErrors({});
         } catch (err) {
