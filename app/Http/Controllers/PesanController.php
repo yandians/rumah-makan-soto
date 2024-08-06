@@ -89,7 +89,7 @@ class PesanController extends Controller
      */
     public function update(UpdatePesanRequest $request, Pesan $pesan)
     {
-        dd("hallo");
+        // dd("hallo");
         // try {
         //     DB::beginTransaction();
             

@@ -3,7 +3,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import userSchema from "./UserSchema";
 import TextInput from "@/Components/TextInput";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import logo from "../../Assets/Logo Full Rumah Makan Soto.png"
+import logo from "../../Assets/Logo Full Rumah Makan Soto.png";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, errors, processing, reset } = useForm({
@@ -61,11 +61,7 @@ export default function Login({ status, canResetPassword }) {
                     <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
                         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                             <div className="flex justify-center items-center">
-                                <img
-                                    className=""
-                                    src={logo}
-                                    alt="logo"
-                                />
+                                <img className="" src={logo} alt="logo" />
                             </div>
 
                             <form
@@ -155,6 +151,15 @@ export default function Login({ status, canResetPassword }) {
                                         Masuk
                                     </button>
                                 </div>
+                                <div>
+                                    Belum Punya akun?{" "}
+                                    <Link
+                                        href={route("register")}
+                                        className="text-blue-600"
+                                    >
+                                        Daftar Sekarang
+                                    </Link>
+                                </div>{" "}
                             </form>
                         </div>
                     </div>
