@@ -18,6 +18,8 @@ export default function Show({ show, onClose, idKasMasuk }) {
         status: "",
     });
 
+    console.log(idKasMasuk)
+
     const [kasMasuk, setKasMasuk] = useState(null);
 
     useEffect(() => {

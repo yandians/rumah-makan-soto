@@ -16,15 +16,15 @@ class KasMasukSeeder extends Seeder
         $items = [
             [
                 'kode' => 'KSP24001',
-                'status' => 'Bayar',
+                'status' => 'Selesai',
             ],
             [
                 'kode' => 'KSP24002',
-                'status' => 'Bayar',
+                'status' => 'Selesai',
             ],
             [
                 'kode' => 'KSP24003',
-                'status' => 'Bayar',
+                'status' => 'Selesai',
             ],
         ];
 
