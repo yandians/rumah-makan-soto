@@ -136,11 +136,15 @@ export default function DaftarMakanan({ makanans, auth }) {
         }
     }, [submitTrigger]);
 
+    const namaPembeli = auth.user.name
+
+    console.log(namaPembeli)
+
     const handleOrder = (e) => {
         e.preventDefault();
         setData("pesan", orders.map((order) => ({
             produk_id: order.id,
-            nama: order.nama,
+            nama: namaPembeli,
             jumlah: order.jumlah,
         })));
         setSubmitTrigger(true);
