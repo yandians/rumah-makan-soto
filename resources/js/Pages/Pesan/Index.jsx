@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { useForm } from "@inertiajs/react";
+import { useForm, router } from "@inertiajs/react";
 import { Button } from "flowbite-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -26,7 +26,7 @@ export default function Index({
     pageTerm,
 }) {
     const { data, setData, put, errors, processing, reset } = useForm({
-        pesan: pesans, // Inisialisasi dengan data pesans
+        pesan: pesans,
     });
 
     const [editIndex, setEditIndex] = useState(null);
@@ -58,10 +58,13 @@ export default function Index({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await put("/pesan/update", { // Pastikan URL sesuai dengan rute update Anda
+            await put(`/pesan/`, {
+                data: data,
                 onSuccess: () => {
                     toast.success("Data berhasil disimpan!");
                     reset();
+                    window.location.href="/pesan";
+                    
                 },
                 onError: (errors) => {
                     console.error(errors); // Log error di konsol
@@ -73,6 +76,7 @@ export default function Index({
             toast.error("Terjadi kesalahan.");
         }
     };
+
 
     const toggleEdit = (index, event) => {
         if (editIndex === index) {
@@ -99,11 +103,11 @@ export default function Index({
         >
             <ToastContainer />
 
-            <div className="py-6">
+            <div className="pt-6">
                 <div className="mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="px-10 pt-10 pb-5 2xl:pb-10 text-gray-900 text-[28px] 2xl:text-4xl font-medium">
-                            <FaShoppingCart className="inline mr-2" />
+                            {/* <FaShoppingCart className="inline mr-2" /> */}
                             DAFTAR PESANAN
                         </div>
                     </div>
@@ -147,13 +151,13 @@ export default function Index({
                                                 {item.kode}
                                             </td>
                                             <td className="px-4 py-5 border-b border-gray-200 text-sm">
-                                                {item.nama}
+                                                {item.kas_masuk_pesan[0].nama}
                                             </td>
                                             <td className="px-4 py-5 border-b border-gray-200 text-sm">
                                                 <ul>
                                                     {item.kas_masuk_pesan.map((sk) => (
                                                         <li key={sk.id}>
-                                                            {sk.nama} (Jumlah: {sk.jumlah}, Harga: {formatRupiah(sk.makanan.harga)})
+                                                            {sk.nama} ({sk.jumlah}*, {formatRupiah(sk.makanan.harga)})
                                                         </li>
                                                     ))}
                                                 </ul>
@@ -169,7 +173,7 @@ export default function Index({
                                             </td>
                                             <td className="px-4 py-5 border-b border-gray-200 text-sm text-center">
                                                 {showEditPopup && editIndex === index ? (
-                                                    <div className="relative" style={{ top: popupPosition.top, left: popupPosition.left }}>
+                                                    <div className="" style={{ top: popupPosition.top, left: popupPosition.left }}>
                                                         <select
                                                             value={statusKey || ""}
                                                             onChange={(e) => handleStatusChange(index, e.target.value)}

@@ -7,7 +7,6 @@ const KasPendapatanSchema = Yup.object().shape({
             jumlah: Yup.number().required("Jumlah harus diisi"),
         })
     ),
-    metode_pembayaran: Yup.string().required("Metode pembayaran harus dipilih"),
 });
 
 export default KasPendapatanSchema;

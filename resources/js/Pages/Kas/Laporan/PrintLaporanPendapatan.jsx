@@ -115,7 +115,7 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
                                                     <li key={sk.id}>
                                                         {"- "}
                                                         {sk.makanan.nama}{" "}
-                                                        (Jumlah : {sk.jumlah}, {" "}
+                                                        ({sk.jumlah}*, {" "}
                                                         {formatRupiah(
                                                             sk.makanan.harga
                                                         )}

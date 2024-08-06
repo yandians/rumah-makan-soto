@@ -1,13 +1,14 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { Button, Modal, TextInput, Label } from "flowbite-react";
+import { Button, Modal, TextInput, Label, Dropdown } from "flowbite-react";
 import { HiOutlinePlusSm } from "react-icons/hi";
+import { HiOutlineDotsHorizontal } from "react-icons/hi";
 import { useForm } from "@inertiajs/react";
 import Select from "react-select";
 import KasPendapatanSchema from "./KasPendapatanSchema";
 import axios from "axios"; // Import axios untuk mengambil data
 
 function formatRupiah(angka) {
-    var formatter = new Intl.NumberFormat("id-ID", {
+    const formatter = new Intl.NumberFormat("id-ID", {
         style: "currency",
         currency: "IDR",
         minimumFractionDigits: 0,
@@ -15,13 +16,7 @@ function formatRupiah(angka) {
     return formatter.format(angka);
 }
 
-export default function Edit({
-    makanans,
-    lastKode,
-    show,
-    onClose,
-    idKasMasuk,
-}) {
+export default function Edit({ makanans, show, onClose, idKasMasuk }) {
     const { data, setData, put, errors, reset } = useForm({
         kode: "",
         makanans: [],
@@ -31,6 +26,10 @@ export default function Edit({
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
+    const [openModalCreate, setOpenModalCreate] = useState(false);
+    const [selectedProduk, setSelectedProduk] = useState(null);
+    const [jumlah, setJumlah] = useState(1);
+    const [selectedStatus, setSelectedStatus] = useState(data.status || "");
 
     useEffect(() => {
         if (idKasMasuk) {
@@ -41,30 +40,23 @@ export default function Edit({
                     setKasMasuk(kasMasukData);
 
                     setData({
-                        ...data,
                         kode: kasMasukData.kode,
                         makanans: kasMasukData.kas_masuk_makanan || [],
                         kas_masuk_pesan: kasMasukData.kas_masuk_pesan || [],
                         metode_pembayaran: kasMasukData.metode_pembayaran,
                         status: kasMasukData.status,
                     });
+
+                    setSelectedStatus(kasMasukData.status); // Update status
                 })
                 .catch((error) => {
-                    console.error("Error fetching produk:", error);
+                    console.error("Error fetching pendapatan:", error);
                 });
         }
     }, [idKasMasuk]);
 
-    const [openModalCreate, setOpenModalCreate] = useState(false);
-    const [selectedProduk, setSelectedProduk] = useState(null);
-    const [jumlah, setJumlah] = useState(1);
-
     const handleToggleModal = () => {
         setOpenModalCreate(!openModalCreate);
-    };
-
-    const parseRupiah = (value) => {
-        return parseInt(value.replace(/[^0-9]/g, ""), 10) || 0;
     };
 
     const handleSelectProduk = (selectedOption) => {
@@ -79,22 +71,28 @@ export default function Edit({
                 harga: selectedProduk.harga,
                 jumlah: jumlah,
             };
-            setData({ ...data, makanans: [...data.makanans, newProduk] });
+            setData((prevData) => ({
+                ...prevData,
+                makanans: [...prevData.makanans, newProduk],
+            }));
             setSelectedProduk(null);
             setJumlah(1);
         }
     };
 
     const handleRemoveProduk = (index) => {
-        const newProduks = [...data.makanans];
-        newProduks.splice(index, 1);
-        setData({ ...data, makanans: newProduks });
+        setData((prevData) => {
+            const newMakanans = [...prevData.makanans];
+            newMakanans.splice(index, 1);
+            return { ...prevData, makanans: newMakanans };
+        });
     };
 
     const handleReset = () => {
         reset();
         setSelectedProduk(null);
         setJumlah(1);
+        setSelectedStatus(data.status || "");
     };
 
     const [validationErrors, setValidationErrors] = useState({});
@@ -133,22 +131,36 @@ export default function Edit({
     }, [makanans, data.makanans]);
 
     const totalPembayaran = useMemo(() => {
-        if (data.makanans.length > 1) {
-            return data.makanans.reduce((total, makanan) => {
-                const hargaProduk = makanan.harga
-                    ? makanan.harga
-                    : makanan.makanan.harga * makanan.jumlah;
-                return total + hargaProduk;
-            }, 0);
-        } else {
-            return data.kas_masuk_pesan.reduce((total, makanan) => {
-                const hargaProduk = makanan.harga
-                    ? makanan.harga
-                    : makanan.makanan.harga * makanan.jumlah;
-                return total + hargaProduk;
-            }, 0);
-        }
+        return [...data.makanans, ...data.kas_masuk_pesan].reduce(
+            (total, makanan) => {
+                const hargaProduk =
+                    makanan.harga ||
+                    (makanan.makanan ? makanan.makanan.harga : 0);
+                return total + hargaProduk * (makanan.jumlah || 1);
+            },
+            0
+        );
     }, [data.makanans, data.kas_masuk_pesan]);
+
+    const statusColor = {
+        "Menunggu Pembayaran": "bg-red-600",
+        "Sudah Dibayar": "bg-blue-500",
+        "Sedang Diproses": "bg-yellow-600",
+        Selesai: "bg-green-500",
+    };
+
+    const statusLabel = {
+        "Menunggu Pembayaran": "Menunggu Pembayaran",
+        "Sudah Dibayar": "Sudah Dibayar",
+        "Sedang Diproses": "Sedang Diproses",
+        Selesai: "Selesai",
+    };
+
+    const handleChange = (event) => {
+        const status = event.target.value;
+        setSelectedStatus(status);
+        setData({ ...data, status }); // Update form data
+    };
 
     return (
         <>
@@ -217,7 +229,7 @@ export default function Edit({
                                                             parseInt(
                                                                 e.target.value,
                                                                 10
-                                                            )
+                                                            ) || 1
                                                         )
                                                     }
                                                     className="w-24 px-2 py-1 border rounded-md"
@@ -269,15 +281,13 @@ export default function Edit({
                                     {data.makanans.map((makanan, index) => (
                                         <tr key={index}>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                {makanan.nama
-                                                    ? makanan.nama
-                                                    : makanan.makanan.nama}
+                                                {makanan.nama ||
+                                                    makanan.makanan.nama}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {formatRupiah(
-                                                    makanan.harga
-                                                        ? makanan.harga
-                                                        : makanan.makanan.harga
+                                                    makanan.harga ||
+                                                        makanan.makanan.harga
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -285,11 +295,9 @@ export default function Edit({
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                 {formatRupiah(
-                                                    makanan.harga
-                                                        ? makanan.harga
-                                                        : makanan.makanan
-                                                              .harga *
-                                                              makanan.jumlah
+                                                    (makanan.harga ||
+                                                        makanan.makanan.harga) *
+                                                        makanan.jumlah
                                                 )}
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -316,11 +324,9 @@ export default function Edit({
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         {formatRupiah(
-                                                            makanan.harga
-                                                                ? makanan.harga
-                                                                : makanan
-                                                                      .makanan
-                                                                      .harga
+                                                            makanan.harga ||
+                                                                makanan.makanan
+                                                                    .harga
                                                         )}
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -328,12 +334,10 @@ export default function Edit({
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                         {formatRupiah(
-                                                            makanan.harga
-                                                                ? makanan.harga
-                                                                : makanan
-                                                                      .makanan
-                                                                      .harga *
-                                                                      makanan.jumlah
+                                                            (makanan.harga ||
+                                                                makanan.makanan
+                                                                    .harga) *
+                                                                makanan.jumlah
                                                         )}
                                                     </td>
                                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -370,62 +374,29 @@ export default function Edit({
                             </table>
                         </div>
 
-                        <div className="mt-4">
-                            <Label
-                                htmlFor="metode_pembayaran"
-                                value="Metode Pembayaran"
-                            />
-                            <div className="flex space-x-4">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Tunai"
-                                        name="metode_pembayaran"
-                                        value="Tunai"
-                                        checked={
-                                            data.metode_pembayaran === "Tunai"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Tunai" className="ml-2">
-                                        Tunai
-                                    </label>
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Debit"
-                                        name="metode_pembayaran"
-                                        value="Debit"
-                                        checked={
-                                            data.metode_pembayaran === "Debit"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Debit" className="ml-2">
-                                        Debit
-                                    </label>
-                                </div>
-                            </div>
-                            {(validationErrors.metode_pembayaran ||
-                                errors.metode_pembayaran) && (
-                                <div className="text-red-500 text-xs italic">
-                                    {validationErrors.metode_pembayaran ||
-                                        errors.metode_pembayaran}
-                                </div>
-                            )}
+                        <div className="relative">
+                            <Label htmlFor="status" value="Pilih Status" />
+                            <select
+                                value={selectedStatus}
+                                onChange={handleChange}
+                                className="block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                            >
+                                <option value="" disabled>
+                                    Pilih Status
+                                </option>
+                                {Object.keys(statusLabel).map((status) => (
+                                    <option
+                                        key={status}
+                                        value={status}
+                                        style={{
+                                            backgroundColor:
+                                                statusColor[status],
+                                        }}
+                                    >
+                                        {statusLabel[status]}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </Modal.Body>
