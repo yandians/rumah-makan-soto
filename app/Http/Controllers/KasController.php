@@ -340,7 +340,7 @@ class KasController extends Controller
     {
 
         $kasMasuk = KasMasuk::with('kasMasukMakanan.makanan', 'kasMasukPesan.makanan')
-            ->where('id', 'like', $id)
+            ->where('kode', 'like', $id)
             ->first();
 
         // dd($kasMasuk);
