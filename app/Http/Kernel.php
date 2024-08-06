@@ -68,9 +68,9 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        // 'owner' => \App\Http\Middleware\Owner::class,
+        'owner' => \App\Http\Middleware\Owner::class,
         'pelanggan' => \App\Http\Middleware\Pelanggan::class,
-        // 'pegawai' => \App\Http\Middleware\Pegawai::class,
+        'pegawai' => \App\Http\Middleware\Pegawai::class,
         // 'redirectBasedOnRole' => \App\Http\Middleware\RedirectBasedOnRole::class,
     ];
 }

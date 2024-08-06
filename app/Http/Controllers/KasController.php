@@ -25,7 +25,9 @@ class KasController extends Controller
      */
     public function indexPendapatan(Request $request)
     {
-        $query = KasMasuk::query();
+        $query = KasMasuk::query()
+            ->with('kasMasukMakanan.makanan')
+            ->where('kode', 'not like', 'PSN%');
 
         $searchTerm = $request->input('search');
         $startDate = $request->input('startDate');
