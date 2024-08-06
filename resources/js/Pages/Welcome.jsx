@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, Head } from "@inertiajs/react";
 import { Button, Navbar, Card } from "flowbite-react";
 import logo from "../Assets/Logo Full Rumah Makan Soto.png";
 import img_soto from "../Assets/soto.png";
@@ -24,6 +24,7 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
 
     return (
         <>
+            <Head title="Landing Page" />
             <Navbar fluid rounded>
                 <Navbar.Brand href="/">
                     <img
@@ -74,7 +75,10 @@ export default function Welcome({ auth, laravelVersion, phpVersion }) {
                     </h3>
                     <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mx-10">
                         {menuToShow.map((menu) => (
-                            <Card key={menu.id} className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
+                            <Card
+                                key={menu.id}
+                                className="bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out"
+                            >
                                 <div className="flex flex-col items-center">
                                     <img
                                         src={menu.image}

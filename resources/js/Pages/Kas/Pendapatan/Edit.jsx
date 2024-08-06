@@ -31,8 +31,6 @@ export default function Edit({
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
-    // console.log("idKasMasuk", idKasMasuk)
-    console.log("data", data);
 
     useEffect(() => {
         if (idKasMasuk) {

@@ -386,37 +386,10 @@ export default function Index({
                                                     )}
                                                 </TableCell>
                                                 <TableCell>
-                                                    {/* <Badge
-                                                        color="gray"
-                                                        className="w-fit"
-                                                    >
-                                                        {
-                                                            kasMasuk.metode_pembayaran
-                                                        }
-                                                    </Badge> */}
                                                     {kasMasuk.kode.startsWith(
                                                         "PSN"
                                                     ) ? (
                                                         <>
-                                                            <div className="flex">
-                                                                <Badge
-                                                                    color="gray"
-                                                                    className="w-fit mr-2"
-                                                                >
-                                                                    {
-                                                                        kasMasuk.metode_pembayaran
-                                                                    }
-                                                                </Badge>
-                                                                <Badge
-                                                                    color="yellow"
-                                                                    className="w-fit"
-                                                                >
-                                                                    {
-                                                                        kasMasuk.status
-                                                                    }
-                                                                </Badge>
-                                                            </div>
-
                                                             {formatRupiah(
                                                                 kasMasuk.kas_masuk_pesan.reduce(
                                                                     (

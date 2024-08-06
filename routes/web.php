@@ -44,16 +44,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified', 'pelanggan'])
     ->name('dashboard');
 
-    Route::get('/generate', function(){
-        \Illuminate\Support\Facades\Artisan::call('storage:link');
-        echo 'ok';
-     });
+Route::get('/generate', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    echo 'ok';
+});
 
-     Route::get('/generate-link', function () {
-        $targetFolder = base_path().'/storage/app/public';
-        $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage';
-        symlink($targetFolder, $linkFolder);
-     });
+Route::get('/generate-link', function () {
+    $targetFolder = base_path() . '/storage/app/public';
+    $linkFolder = $_SERVER['DOCUMENT_ROOT'] . '/storage';
+    symlink($targetFolder, $linkFolder);
+});
 
 Route::middleware(['auth', 'pegawai'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -73,11 +73,11 @@ Route::middleware(['auth', 'pegawai'])->group(function () {
     Route::put('/pengeluaran/{pengeluaran}', [KasController::class, 'updatePengeluaran'])->name('kasPengeluaran.update');
     Route::delete('/pengeluaran/{kode}', [KasController::class, 'destroyPengeluaran'])->name('kasPengeluaran.destroy');
 
-    Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
-    Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');
-    Route::get('/pesan/{id}', [PesanController::class, 'show'])->name('pesan.show');;
-    Route::put('/pesan/{pesan}', [PesanController::class, 'update'])->name('pesan.update');
-    Route::delete('/pesan/{kode}', [PesanController::class, 'destroy'])->name('pesan.destroy');
+    // Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
+    // Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');
+    // Route::get('/pesan/{id}', [PesanController::class, 'show'])->name('pesan.show');;
+    // Route::put('/pesan/{pesan}', [PesanController::class, 'update'])->name('pesan.update');
+    // Route::delete('/pesan/{kode}', [PesanController::class, 'destroy'])->name('pesan.destroy');
 
     Route::get('/kas/create', [KasController::class, 'create'])->name('kas.create');
     Route::post('/kas', [KasController::class, 'store'])->name('kas.store');
@@ -111,7 +111,7 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::get('/makanan/{makanan}/edit', [MakananController::class, 'edit'])->name('makanan.edit');
     Route::post('/makanan/{makanan}', [MakananController::class, 'update'])->name('makanan.update');
     Route::delete('/makanan/{makanan}', [MakananController::class, 'destroy'])->name('makanan.destroy');
-    
+
     Route::get('/laporan/pendapatan', [KasController::class, 'indexLaporanPendapatan'])->name('kasLaporanPendapatan.index');
     Route::get('/laporan/pengeluaran', [KasController::class, 'indexLaporanPengeluaran'])->name('kasLaporanPengeluaran.index');
     Route::get('/laporan/bukubesar', [KasController::class, 'indexLaporanBukuBesar'])->name('kasLaporanBukuBesar.index');
@@ -119,6 +119,14 @@ Route::middleware(['auth', 'owner'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/daftar-menu', [DaftarMenuController::class, 'index'])->name('daftarMenu.index');
+    Route::get('/pesan', [PesanController::class, 'index'])->name('pesan.index');
+    Route::post('/pesan', [PesanController::class, 'store'])->name('pesan.store');
+    Route::get('/pesan/test', [PesanController::class, 'indexTest'])->name('pesanTest.index');
+    Route::post('/pesan/test', [PesanController::class, 'storeTest'])->name('pesanTest.store');
+    // Route::get('/pesan/{id}', [PesanController::class, 'show'])->name('pesan.show');;
+    // Route::put('/pesan/{pesan}', [PesanController::class, 'update'])->name('pesan.update');
+    // Route::delete('/pesan/{kode}', [PesanController::class, 'destroy'])->name('pesan.destroy');
+
 });
 
 
