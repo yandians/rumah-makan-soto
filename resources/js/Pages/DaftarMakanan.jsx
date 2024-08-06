@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "@inertiajs/inertia-react";
 import { usePage } from '@inertiajs/react'
+import { Inertia } from "@inertiajs/inertia";
 
 
 const Pesanan = ({ orders, onOrder }) => {
