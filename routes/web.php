@@ -32,8 +32,6 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/daftar-menu', [DaftarMenuController::class, 'index']);
-
 // Route::get('/', function () {
 //     return Inertia::location(route('login'));
 // });
@@ -43,7 +41,7 @@ Route::get('/daftar-menu', [DaftarMenuController::class, 'index']);
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified', 'pelanggan'])
     ->name('dashboard');
 
     Route::get('/generate', function(){
@@ -57,7 +55,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
         symlink($targetFolder, $linkFolder);
      });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'pegawai'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -117,6 +115,10 @@ Route::middleware(['auth', 'owner'])->group(function () {
     Route::get('/laporan/pendapatan', [KasController::class, 'indexLaporanPendapatan'])->name('kasLaporanPendapatan.index');
     Route::get('/laporan/pengeluaran', [KasController::class, 'indexLaporanPengeluaran'])->name('kasLaporanPengeluaran.index');
     Route::get('/laporan/bukubesar', [KasController::class, 'indexLaporanBukuBesar'])->name('kasLaporanBukuBesar.index');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/daftar-menu', [DaftarMenuController::class, 'index'])->name('daftarMenu.index');
 });
 
 

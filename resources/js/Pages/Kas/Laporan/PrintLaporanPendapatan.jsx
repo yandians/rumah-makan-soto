@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useRef, forwardRef } from "react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { useReactToPrint } from "react-to-print";
-import { Inertia } from "@inertiajs/inertia";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Head, Link, usePage } from "@inertiajs/react";
 import {
     Table,
     TableBody,
@@ -12,16 +7,10 @@ import {
     TableHead,
     TableHeadCell,
     TableRow,
-    TextInput,
-    Badge,
-    Button,
 } from "flowbite-react";
-import { HiPrinter } from "react-icons/hi";
 import moment from "moment";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
-import { format } from "date-fns";
 import { id } from "date-fns/locale";
 registerLocale("id", id);
 setDefaultLocale("id");
@@ -49,7 +38,6 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
             <div className="px-10 pt-10 pb-5 text-gray-900 text-lg xl:text-xl font-medium text-center">
                 LAPORAN PENDAPATAN
                 <br />
-                {/* Priode {" "} */}
                 {date[0].startDate || date[0].endDate
                     ? date[0].startDate && date[0].endDate
                         ? date[0].startDate.toLocaleDateString("id-ID", {
@@ -138,12 +126,6 @@ const PrintLaporanPendapatan = React.forwardRef(({ kasMasuk, date }, ref) => {
                                         </ul>
                                     </TableCell>
                                     <TableCell className="flex items-center">
-                                        <Badge
-                                            color="gray"
-                                            className="w-fit mr-2"
-                                        >
-                                            {kasMasuk.metode_pembayaran}
-                                        </Badge>
                                         {formatRupiah(
                                             kasMasuk.kas_masuk_makanan.reduce(
                                                 (total, sk) =>

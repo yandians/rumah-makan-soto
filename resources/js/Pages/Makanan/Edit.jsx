@@ -118,6 +118,7 @@ export default function Edit({ idMakanan, show, onClose }) {
                 },
             });
         } catch (err) {
+            console.log("err", err)
             if (err.inner) {
                 const newErrors = {};
                 err.inner.forEach((error) => {
@@ -127,6 +128,7 @@ export default function Edit({ idMakanan, show, onClose }) {
             }
         }
     };
+    console.log("error", errors)
 
 
     const handleImageChange = (e) => {

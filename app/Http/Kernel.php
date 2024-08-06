@@ -42,7 +42,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -68,7 +68,9 @@ class Kernel extends HttpKernel
     ];
 
     protected $routeMiddleware = [
-        'owner' => \App\Http\Middleware\Owner::class,
+        // 'owner' => \App\Http\Middleware\Owner::class,
+        'pelanggan' => \App\Http\Middleware\Pelanggan::class,
+        // 'pegawai' => \App\Http\Middleware\Pegawai::class,
+        // 'redirectBasedOnRole' => \App\Http\Middleware\RedirectBasedOnRole::class,
     ];
-    
 }

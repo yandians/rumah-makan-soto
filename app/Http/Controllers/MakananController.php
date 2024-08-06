@@ -58,18 +58,15 @@ class MakananController extends Controller
             $originalFilename = $request->file('image')->getClientOriginalName();
             $timestamp = now()->timestamp;
 
-            // Replace spaces with underscores
             $sanitizedFilename = str_replace(' ', '_', $originalFilename);
             $newFilename = $timestamp . '_' . $sanitizedFilename;
 
-            // Store the file
             $path = $request->file('image')->storeAs('images', $newFilename, 'public');
 
             $makanan = new Makanan();
             $makanan->nama = $request['nama'];
             $makanan->kategori = $request['kategori'];
             $makanan->harga = $request['harga'];
-            // Store the path relative to the 'storage' folder
             $makanan->image = 'storage/' . $path;
             $makanan->deskripsi = $request['deskripsi'];
             $makanan->save();
@@ -120,9 +117,7 @@ class MakananController extends Controller
     public function update(UpdateMakananRequest $request, Makanan $makanan)
     {
         try {
-            // If a new image is uploaded, process it
             if ($request->hasFile('image')) {
-                // Delete the old image if it exists
                 if ($makanan->image && \Illuminate\Support\Facades\Storage::disk('public')->exists(str_replace('storage/', '', $makanan->image))) {
                     \Illuminate\Support\Facades\Storage::disk('public')->delete(str_replace('storage/', '', $makanan->image));
                 }
@@ -130,18 +125,14 @@ class MakananController extends Controller
                 $originalFilename = $request->file('image')->getClientOriginalName();
                 $timestamp = now()->timestamp;
 
-                // Replace spaces with underscores
                 $sanitizedFilename = str_replace(' ', '_', $originalFilename);
                 $newFilename = $timestamp . '_' . $sanitizedFilename;
 
-                // Store the file
                 $path = $request->file('image')->storeAs('images', $newFilename, 'public');
 
-                // Update the image path
                 $makanan->image = 'storage/' . $path;
             }
 
-            // Update other fields
             $makanan->nama = $request['nama'];
             $makanan->kategori = $request['kategori'];
             $makanan->harga = $request['harga'];

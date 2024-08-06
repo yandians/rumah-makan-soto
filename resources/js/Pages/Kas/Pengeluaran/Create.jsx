@@ -43,12 +43,10 @@ export default function Create({ lastKode }) {
         nama: "",
         jumlah: 0,
         total: 0,
-        metode_pembayaran: "",
         keterangan: "",
     });
 
     const [openModalCreate, setOpenModalCreate] = useState(false);
-    const [selectedProduk, setSelectedProduk] = useState(null);
 
     const handleToggleModal = () => {
         setOpenModalCreate(!openModalCreate);
@@ -180,64 +178,6 @@ export default function Create({ lastKode }) {
                             {(validationErrors.total || errors.total) && (
                                 <div className="text-red-500 text-xs italic">
                                     {validationErrors.total || errors.total}
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="mt-4">
-                            <Label
-                                htmlFor="metode_pembayaran"
-                                value="Metode Pembayaran"
-                            />
-                            <div className="flex space-x-4">
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Tunai"
-                                        name="metode_pembayaran"
-                                        value="Tunai"
-                                        checked={
-                                            data.metode_pembayaran === "Tunai"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Tunai" className="ml-2">
-                                        Tunai
-                                    </label>
-                                </div>
-                                <div>
-                                    <input
-                                        type="radio"
-                                        id="Debit"
-                                        name="metode_pembayaran"
-                                        value="Debit"
-                                        checked={
-                                            data.metode_pembayaran === "Debit"
-                                        }
-                                        onChange={(e) =>
-                                            setData({
-                                                ...data,
-                                                metode_pembayaran:
-                                                    e.target.value,
-                                            })
-                                        }
-                                    />
-                                    <label htmlFor="Debit" className="ml-2">
-                                        Debit
-                                    </label>
-                                </div>
-                            </div>
-                            {(validationErrors.metode_pembayaran ||
-                                errors.metode_pembayaran) && (
-                                <div className="text-red-500 text-xs italic">
-                                    {validationErrors.metode_pembayaran ||
-                                        errors.metode_pembayaran}
                                 </div>
                             )}
                         </div>
