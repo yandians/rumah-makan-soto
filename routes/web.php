@@ -124,7 +124,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pesan/test', [PesanController::class, 'indexTest'])->name('pesanTest.index');
     Route::post('/pesan/test', [PesanController::class, 'storeTest'])->name('pesanTest.store');
     // Route::get('/pesan/{id}', [PesanController::class, 'show'])->name('pesan.show');;
-    // Route::put('/pesan/{pesan}', [PesanController::class, 'update'])->name('pesan.update');
+    Route::put('/pesan', [PesanController::class, 'update'])->name('pesan.update');
     // Route::delete('/pesan/{kode}', [PesanController::class, 'destroy'])->name('pesan.destroy');
 
 });
