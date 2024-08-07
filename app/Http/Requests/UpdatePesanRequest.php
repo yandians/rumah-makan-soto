@@ -26,7 +26,7 @@ class UpdatePesanRequest extends FormRequest
         // 'pesan.*.nama' => 'required|string|max:255',
         // 'pesan.*.produk_id' => 'required|exists:makanans,id',
         // 'pesan.*.jumlah' => 'required|integer|min:1',
-        'pesan.*.status' => 'required|string|in:Menunggu Pembayaran,Sudah Dibayar,Sedang Diproses,Selesai',
+        'pesan.*.status' => 'required|string|in:Menunggu Pembayaran,Sudah Dibayar,Sedang Diproses,Selesai,Cencel',
     ];
 }
 
@@ -45,7 +45,7 @@ public function messages()
         // 'pesan.*.jumlah.min' => 'Jumlah minimal adalah 1.',
         'status.required' => 'Status wajib diisi.',
         'status.string' => 'Status harus berupa teks.',
-        'status.in' => 'Status harus salah satu dari: Menunggu Pembayaran,Sudah Dibayar,Sedang Diproses on Selesai.',
+        'status.in' => 'Status harus salah satu dari: Menunggu Pembayaran,Sudah Dibayar,Sedang Diproses,Selesai,Cencel.',
     ];
 }
 

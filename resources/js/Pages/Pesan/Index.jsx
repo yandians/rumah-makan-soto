@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { useForm, router } from "@inertiajs/react";
+import { useForm, Head } from "@inertiajs/react";
 import { Button } from "flowbite-react";
 import { FaShoppingCart } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -38,6 +38,7 @@ export default function Index({
         paid: "bg-blue-500",
         on_process: "bg-yellow-600",
         completed: "bg-green-500",
+        cencel: "bg-slate-500",
     };
 
     const statusLabel = {
@@ -45,6 +46,7 @@ export default function Index({
         paid: "Sudah Dibayar",
         on_process: "Sedang Diproses",
         completed: "Selesai",
+        cencel: "Cencel",
     };
 
     const handleStatusChange = (index, newStatus) => {
@@ -63,8 +65,7 @@ export default function Index({
                 onSuccess: () => {
                     toast.success("Data berhasil disimpan!");
                     reset();
-                    window.location.href="/pesan";
-                    
+                    window.location.href = "/pesan";
                 },
                 onError: (errors) => {
                     console.error(errors); // Log error di konsol
@@ -77,7 +78,6 @@ export default function Index({
         }
     };
 
-
     const toggleEdit = (index, event) => {
         if (editIndex === index) {
             setEditIndex(null);
@@ -86,7 +86,9 @@ export default function Index({
             setEditIndex(index);
             setShowEditPopup(true);
             setPopupPosition({
-                top: event.currentTarget.offsetTop + event.currentTarget.offsetHeight,
+                top:
+                    event.currentTarget.offsetTop +
+                    event.currentTarget.offsetHeight,
                 left: event.currentTarget.offsetLeft,
             });
         }
@@ -102,6 +104,7 @@ export default function Index({
             }
         >
             <ToastContainer />
+            <Head title="Pesan" />
 
             <div className="pt-6">
                 <div className="mx-auto sm:px-6 lg:px-8">
@@ -141,75 +144,156 @@ export default function Index({
                                 </tr>
                             </thead>
                             <tbody>
-                                {data.pesan.map((item, index) => {
-                                    const statusKey = Object.keys(statusLabel).find(
-                                        (key) => statusLabel[key] === item.status
-                                    );
-                                    return (
-                                        <tr key={index}>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm">
-                                                {item.kode}
-                                            </td>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm">
-                                                {item.kas_masuk_pesan[0].nama}
-                                            </td>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm">
-                                                <ul>
-                                                    {item.kas_masuk_pesan.map((sk) => (
-                                                        <li key={sk.id}>
-                                                            {sk.nama} ({sk.jumlah}*, {formatRupiah(sk.makanan.harga)})
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            </td>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm">
-                                                {formatRupiah(
-                                                    item.kas_masuk_pesan.reduce(
-                                                        (total, sk) =>
-                                                            total + sk.jumlah * sk.makanan.harga,
-                                                        0
-                                                    )
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm text-center">
-                                                {showEditPopup && editIndex === index ? (
-                                                    <div className="" style={{ top: popupPosition.top, left: popupPosition.left }}>
-                                                        <select
-                                                            value={statusKey || ""}
-                                                            onChange={(e) => handleStatusChange(index, e.target.value)}
-                                                            className="form-select block w-full mt-1"
+                                {data.pesan.length >= 1 ? (
+                                    data.pesan.map((item, index) => {
+                                        const statusKey = Object.keys(
+                                            statusLabel
+                                        ).find(
+                                            (key) =>
+                                                statusLabel[key] === item.status
+                                        );
+                                        return (
+                                            <tr key={index}>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm">
+                                                    {item.kode}
+                                                </td>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm">
+                                                    {
+                                                        item.kas_masuk_pesan[0]
+                                                            .nama
+                                                    }
+                                                </td>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm">
+                                                    <ul>
+                                                        {item.kas_masuk_pesan.map(
+                                                            (sk) => (
+                                                                <li key={sk.id}>
+                                                                    {sk.nama} (
+                                                                    {sk.jumlah}
+                                                                    *,{" "}
+                                                                    {formatRupiah(
+                                                                        sk
+                                                                            .makanan
+                                                                            .harga
+                                                                    )}
+                                                                    )
+                                                                </li>
+                                                            )
+                                                        )}
+                                                    </ul>
+                                                </td>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm">
+                                                    {formatRupiah(
+                                                        item.kas_masuk_pesan.reduce(
+                                                            (total, sk) =>
+                                                                total +
+                                                                sk.jumlah *
+                                                                    sk.makanan
+                                                                        .harga,
+                                                            0
+                                                        )
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm text-center">
+                                                    {showEditPopup &&
+                                                    editIndex === index ? (
+                                                        <div
+                                                            className=""
+                                                            style={{
+                                                                top: popupPosition.top,
+                                                                left: popupPosition.left,
+                                                            }}
                                                         >
-                                                            {Object.entries(statusLabel).map(([key, label]) => (
-                                                                <option key={key} value={key}>
-                                                                    {label}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                    </div>
-                                                ) : (
-                                                    <div className={`p-2 rounded-lg text-white ${statusColor[statusKey] || "bg-gray-500"}`}>
-                                                        {item.status}
-                                                    </div>
-                                                )}
-                                            </td>
-                                            <td className="px-4 py-5 border-b border-gray-200 text-sm text-center relative">
-                                                <button
-                                                    onClick={(e) => toggleEdit(index, e)}
-                                                    className="text-blue-500 hover:text-blue-700"
-                                                >
-                                                    {showEditPopup && editIndex === index ? <MdCancel /> : <CiEdit />}
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                                            <select
+                                                                value={
+                                                                    statusKey ||
+                                                                    ""
+                                                                }
+                                                                onChange={(e) =>
+                                                                    handleStatusChange(
+                                                                        index,
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                className="form-select block w-full mt-1"
+                                                            >
+                                                                {Object.entries(
+                                                                    statusLabel
+                                                                ).map(
+                                                                    ([
+                                                                        key,
+                                                                        label,
+                                                                    ]) => (
+                                                                        <option
+                                                                            key={
+                                                                                key
+                                                                            }
+                                                                            value={
+                                                                                key
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                label
+                                                                            }
+                                                                        </option>
+                                                                    )
+                                                                )}
+                                                            </select>
+                                                        </div>
+                                                    ) : (
+                                                        <div
+                                                            className={`p-2 rounded-lg text-white ${
+                                                                statusColor[
+                                                                    statusKey
+                                                                ] ||
+                                                                "bg-gray-500"
+                                                            }`}
+                                                        >
+                                                            {item.status}
+                                                        </div>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-5 border-b border-gray-200 text-sm text-center relative">
+                                                    <button
+                                                        onClick={(e) =>
+                                                            toggleEdit(index, e)
+                                                        }
+                                                        className="text-blue-500 hover:text-blue-700"
+                                                    >
+                                                        {showEditPopup &&
+                                                        editIndex === index ? (
+                                                            <MdCancel />
+                                                        ) : (
+                                                            <CiEdit />
+                                                        )}
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan="6"
+                                            className="px-4 py-5 border-b border-gray-200 text-sm text-center"
+                                        >
+                                            Pesanan kosong
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <div className="mx-auto sm:px-6 lg:px-8 py-4 text-center">
-                <Button type="button" onClick={handleSubmit} color="success" disabled={processing}>
+                <Button
+                    type="button"
+                    onClick={handleSubmit}
+                    color="success"
+                    disabled={processing}
+                >
                     {processing ? "Menyimpan..." : "Simpan"}
                 </Button>
             </div>

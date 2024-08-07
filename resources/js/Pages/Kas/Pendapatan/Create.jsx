@@ -80,7 +80,6 @@ export default function Create({ makanans, lastKode }) {
                 },
             });
         } catch (err) {
-            console.log("err", err)
             if (err.inner) {
                 const newErrors = {};
                 err.inner.forEach((error) => {
@@ -90,8 +89,6 @@ export default function Create({ makanans, lastKode }) {
             }
         }
     };
-    console.log("error", errors)
-
 
     const optionsProduk = useMemo(() => {
         return makanans
