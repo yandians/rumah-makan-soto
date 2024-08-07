@@ -126,12 +126,6 @@ const PrintLaporanPengeluaran = React.forwardRef(({ kasKeluar, date }, ref) => {
                                     </TableCell>
 
                                     <TableCell className="flex items-center">
-                                        <Badge
-                                            color="gray"
-                                            className="w-fit mr-2"
-                                        >
-                                            {kasKeluar.metode_pembayaran}
-                                        </Badge>
                                         {formatRupiah(kasKeluar.total)}
                                     </TableCell>
                                 </TableRow>

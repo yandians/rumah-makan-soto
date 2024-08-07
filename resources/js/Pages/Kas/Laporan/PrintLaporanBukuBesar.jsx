@@ -159,15 +159,7 @@ const PrintLaporanBukuBesar = React.forwardRef(({ kas, date }, ref) => {
                                             " - "
                                         ) : kas.kode.startsWith("KSP") ? (
                                             <div className="flex items-center">
-                                                <Badge
-                                                    color="gray"
-                                                    className="w-fit mr-2"
-                                                >
-                                                    {
-                                                        kas.kas_masuk
-                                                            .metode_pembayaran
-                                                    }
-                                                </Badge>
+                                                
                                                 {formatRupiah(
                                                     kas.kas_masuk.kas_masuk_makanan.reduce(
                                                         (total, sk) =>
@@ -185,15 +177,7 @@ const PrintLaporanBukuBesar = React.forwardRef(({ kas, date }, ref) => {
                                     <TableCell>
                                         {kas.kode.startsWith("KSK") ? (
                                             <div className="flex items-center">
-                                                <Badge
-                                                    color="gray"
-                                                    className="w-fit mr-2"
-                                                >
-                                                    {
-                                                        kas.kas_keluar
-                                                            .metode_pembayaran
-                                                    }
-                                                </Badge>
+                                              
                                                 {formatRupiah(kas.kas_keluar.total)}
                                             </div>
                                         ) : kas.kode.startsWith("KSP") ? (
