@@ -12,6 +12,7 @@ export default function Delete({ show, onClose, idKasMasuk }) {
     });
 
     const [kasMasuk, setKasMasuk] = useState(null);
+    console.log("id",idKasMasuk)
 
     useEffect(() => {
         if (idKasMasuk) {

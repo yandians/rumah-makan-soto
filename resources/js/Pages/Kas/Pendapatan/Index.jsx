@@ -467,7 +467,7 @@ export default function Index({
                                                         <Dropdown.Item
                                                             onClick={() =>
                                                                 handleDeleteClick(
-                                                                    kasMasuk.id
+                                                                    kasMasuk.kode
                                                                 )
                                                             }
                                                         >

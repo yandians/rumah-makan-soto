@@ -130,6 +130,13 @@ class PesanController extends Controller
                 $newKode = $kodeLama;
 
                 if (strpos($kodeLama, 'PSN') === 0) {
+                    if ($status === "Cencel") {
+                        Kas::where('kode', $item['kode'])->delete();
+                        KasMasuk::where('kode', $item['kode'])->delete();
+                        Pesan::where('kode', $item['kode'])->delete();
+                        DB::commit();
+                        return redirect()->back()->with('message', 'Pesanan Anda berhasil dihapus dengan kode invoice: ' . $kode);
+                    }
                     $lastKodePesan = KasMasuk::where('kode', 'like', 'KSP24%')->orderBy('kode', 'desc')->first();
                     $lastKode = $lastKodePesan ? $lastKodePesan->kode : "KSP24000";
                     // dd($lastKode);
@@ -165,41 +172,6 @@ class PesanController extends Controller
                     }
                 }
             }
-
-            // $kodeLama = $request->input('kode');
-
-            // // Generate the new kode
-            // $lastKodePesan = Pesan::where('kode', 'like', 'KSP24%')->orderBy('kode', 'desc')->first();
-            // $lastKode = $lastKodePesan ? $lastKodePesan->kode : "KSP24000";
-            // $lastNumber = (int)substr($lastKode, 3);
-            // $newNumber = $lastNumber + 1;
-            // $newKode = 'KSP24' . str_pad($newNumber, 3, '0', STR_PAD_LEFT);
-
-            // // Update kas and kas_masuk
-            // $kas = Kas::where('kode', $kodeLama)->first();
-            // if ($kas) {
-            //     $kas->update(['kode' => $newKode]);
-            // } else {
-            //     $kas = Kas::create(['kode' => $newKode]);
-            // }
-
-            // $kasMasuk = KasMasuk::where('kode', $kodeLama)->first();
-            // if ($kasMasuk) {
-            //     $kasMasuk->update(['kode' => $newKode, 'status' => 'pending']);
-            // } else {
-            //     $kasMasuk = KasMasuk::create(['kode' => $newKode, 'status' => 'pending']);
-            // }
-
-            // // Delete old pesan and create new pesan
-            // Pesan::where('kode', $kodeLama)->delete();
-            // foreach ($request->pesan as $item) {
-            //     $pesan = new Pesan();
-            //     $pesan->kode = $newKode;
-            //     $pesan->nama = $item['nama'];
-            //     $pesan->makanan_id = $item['produk_id']; // Use produk_id
-            //     $pesan->jumlah = $item['jumlah'];
-            //     $pesan->save();
-            // }
 
             DB::commit();
 
